@@ -21,7 +21,7 @@
   {/if}
 {/if}
 
-<div className="mt-6">
+<div class="mt-6">
   {#each clients as client}
     <div>
       <Link href="/clients/{client.id}">{client.title}</Link>
