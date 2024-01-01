@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_01_202356) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_01_204644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,4 +24,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_01_202356) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.datetime "start", null: false
+    t.integer "duration", null: false
+    t.integer "charge_cents", default: 0, null: false
+    t.string "charge_currency", default: "USD", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_sessions_on_client_id"
+  end
+
+  add_foreign_key "sessions", "clients"
 end
