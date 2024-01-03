@@ -1,8 +1,10 @@
 import axios from 'axios'
 
-import * as bootstrap from 'bootstrap'
+import 'bootstrap'
 
 import { createInertiaApp } from '@inertiajs/svelte'
+
+import Layout from '../components/Layouts/Layout.svelte'
 
 const pages = import.meta.glob('../pages/**/*.svelte')
 
@@ -10,7 +12,10 @@ const csrfToken = document.querySelector('meta[name=csrf-token]').content
 axios.defaults.headers.common['X-CSRF-Token'] = csrfToken
 
 createInertiaApp({
-    resolve: name => pages[`../pages/${name}.svelte`](),
+    resolve: async name => {
+        const page = await pages[`../pages/${name}.svelte`]()
+        return Object.assign({layout: Layout}, page)
+    },
     setup({ el, App, props }) {
         new App({ target: el, props })
     },
