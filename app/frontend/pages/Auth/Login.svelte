@@ -18,9 +18,9 @@
   }
 </script>
 
-<div class="row">
+<div class="container d-flex mt-5">
   <div class="col-3 mx-auto text-center border">
-    <form on:submit|preventDefault={submit} class="form-sig">
+    <form on:submit|preventDefault={submit}>
       <!-- Email input -->
       <div class="form-outline mb-4">
         <input type="email" id="email" class="form-control" bind:value={$form.user.email} />
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <button type="submit" disabled={$form.processing}>Login</button>
+      <button type="submit" class="btn btn-primary btn-block" disabled={$form.processing}>Sign in</button>
     </form>
   </div>
 </div>

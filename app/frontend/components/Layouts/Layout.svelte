@@ -3,12 +3,10 @@
   // import FlashMessages from "./FlashMessages.svelte";
 </script>
 
-<div class="bg-white">
+<main>
   <MainNav />
 
-  <main>
-    <div>
-      <slot />
-    </div>
-  </main>
-</div>
+  <div>
+    <slot />
+  </div>
+</main>

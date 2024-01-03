@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 import 'bootstrap'
+import * as mdb from 'mdb-ui-kit'; // lib
+window.mdb = mdb;
 
 import { createInertiaApp } from '@inertiajs/svelte'
 
