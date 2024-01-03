@@ -21,12 +21,12 @@
   {/if}
 {/if}
 
-<div class="mt-6">
+<table class="table table-striped">
   {#each clients as client}
-    <div>
-      <Link href="/clients/{client.id}">{client.title}</Link>
-      <Link href="/client/{client.id}/edit">Edit</Link>
-      <button use:inertia="{{ href: '/clients/'+clients.id, method: 'delete' }}" type="button">Delete</button>
-    </div>
-  {/each}
-</div>
+    <tr>
+      <td><Link href="/clients/{client.id}">{client.name}</Link>
+      <td><button class="btn btn-primary" use:inertia="{{ href: '/clients/'+clients.id, method: 'delete' }}" type="button">Delete</button></td>
+    </tr>
+    {/each}
+</table>
+
