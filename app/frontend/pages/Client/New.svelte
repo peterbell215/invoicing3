@@ -1,8 +1,10 @@
 <script>
   import { useForm } from '@inertiajs/svelte'
+  import FormInput from "~/components/FormInput.svelte";
 
   let form = useForm({
     name: null,
+    email: null,
     address1: null,
     address2: null,
     town: null,
@@ -14,19 +16,41 @@
   }
 </script>
 
-<form on:submit|preventDefault={submit}>
-  <label />
-  <input type="text" bind:value={$form.name} />
-  <input type="text" bind:value={$form.address1} />
-  <input type="text" bind:value={$form.address2} />
-  <input type="text" bind:value={$form.town} />,
-  <input type="text" bind:value={$form.postcode} />,
-  <input type="text" bind:value={$form.title} />
-  {#if $form.errors.title}
-    <div class="form-error">{$form.errors.title}</div>
-  {/if}
-  {#if $form.errors.body}
-    <div class="form-error">{$form.errors.body}</div>
-  {/if}
-  <button type="submit" disabled={$form.processing}>Submit</button>
-</form>
+<div class="row">
+  <div class="col-md-8 mb-4">
+    <div class="card mb-4">
+      <div class="card-header py-3">
+        <h5 class="mb-0">Billing Details</h5>
+      </div>
+      <div class="card-body">
+        <form on:submit|preventDefault={submit}>
+
+          <!-- Email input -->
+          <FormInput {form} field="name" label_name="Name"/>
+          <FormInput {form} field="email" type="email" label_name="Email"/>
+          <FormInput {form} field="address1" label_name="Address Line 1"/>
+          <FormInput {form} field="address2" label_name="Address Line 2"/>
+
+          <div class="row mb-4">
+            <div class="col">
+              <FormInput {form} field="town" label_name="Town"/>
+            </div>
+            <div class="col">
+              <FormInput {form} field="postcode" label_name="Postcode"/>
+            </div>
+          </div>
+          <!-- Town input -->
+          <!-- Postcode input -->
+
+          {#if $form.errors.title}
+            <div class="form-error">{$form.errors.title}</div>
+          {/if}
+          {#if $form.errors.body}
+            <div class="form-error">{$form.errors.body}</div>
+          {/if}
+          <button type="submit" class="btn btn-primary btn-block" disabled={$form.processing}>Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
