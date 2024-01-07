@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'active_support/concern'
 
+# Concern to provide auth logic,
 module Auth
   extend ActiveSupport::Concern
 

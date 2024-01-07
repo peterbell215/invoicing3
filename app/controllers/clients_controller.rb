@@ -3,10 +3,11 @@
 # Controller to handle REST-ful requests for Client
 class ClientsController < ApplicationController
   # include Auth
-  # skip_before_action :authenticate_user!, only: %i[ index show ]
-  before_action :set_client, only: %i[show edit update destroy]
+  # skip_before_action :authenticate_user!, only: %i[index show]
 
-  # after_action :verify_authorized
+  before_action :set_client, only: %i[edit update destroy]
+
+  after_action :verify_authorized, except: %i[index show]
 
   # GET /clients or /clients.json
   def index

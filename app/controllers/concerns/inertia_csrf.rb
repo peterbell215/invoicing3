@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/concern'
 
 # Store the CSRF token in a non-session cookie so Axios can access it

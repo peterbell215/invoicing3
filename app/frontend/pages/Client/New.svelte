@@ -14,6 +14,12 @@
   function submit() {
     $form.post('/clients')
   }
+
+  function onBlur(event) {
+    if (!form.postcode.match(/^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i)) {
+      $form.errors.postcode = "Invalid Postcode"
+    }
+  }
 </script>
 
 <div class="row">
@@ -36,7 +42,7 @@
               <FormInput {form} field="town" label_name="Town"/>
             </div>
             <div class="col">
-              <FormInput {form} field="postcode" label_name="Postcode"/>
+              <FormInput {form} field="postcode" label_name="Postcode" on:blur={onBlur}/>
             </div>
           </div>
           <!-- Town input -->

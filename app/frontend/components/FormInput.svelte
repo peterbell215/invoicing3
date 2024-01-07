@@ -15,3 +15,7 @@
            bind:value={$form[field]} />
     <label class="form-label" for="name">{label_name}</label>
 </div>
+
+{#if $form.errors[field]!==undefined}
+    <div class="form-error">{$form.errors[field]}</div>
+{/if}

@@ -14,6 +14,7 @@
   })
 
   function submit() {
+
     $form.post('/login')
   }
 </script>
