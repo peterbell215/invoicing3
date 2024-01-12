@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This model represents the default charge that is applied to a specific client over a specific period.
 class SessionCharge < ApplicationRecord
   belongs_to :client
 
@@ -5,7 +8,7 @@ class SessionCharge < ApplicationRecord
 
   # Checks if for the provided client_id any session charge entries' date ranges overlap.
   # @param [ActiveResult] session_charges
-  # @return [SessionCharge|false]
+  # @return [SessionCharge]
   def self.overlap?(session_charges)
     return false if session_charges.length <= 1
 

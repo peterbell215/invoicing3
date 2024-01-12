@@ -47,8 +47,10 @@ gem 'bootsnap', require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
   gem 'foreman'
-
+  gem 'rspec-rails', ">= 3.9.0"
   gem 'rubocop'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
