@@ -2,7 +2,7 @@
 
 # Controller to handle REST-ful requests for Client
 class ClientsController < ApplicationController
-  # include Auth
+  include Auth
   # skip_before_action :authenticate_user!, only: %i[index show]
 
   before_action :set_client, only: %i[edit update destroy]
