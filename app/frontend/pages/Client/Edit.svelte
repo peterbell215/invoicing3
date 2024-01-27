@@ -1,10 +1,11 @@
 <script>
   import { useForm } from '@inertiajs/svelte'
 
-  export let client
+  export let client;
 
   let form = useForm({
     name: client.name,
+    email: client.email,
     address1: client.address1,
     address2: client.address2,
     town: client.town,

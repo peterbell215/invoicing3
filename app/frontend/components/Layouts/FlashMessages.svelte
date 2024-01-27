@@ -12,7 +12,7 @@
   // text-green-400
   // text-green-800
 
-  let color = 'green'
+  let alert_type = 'alert-success'
 
   $: flash = $page.props.flash
   $: show = $page.props.has_flash
@@ -21,33 +21,24 @@
 
   $: if (show) {
     if (flash.alert) {
-      color = 'red'
+      alert_type = 'alert-alert'
       msg = flash.alert
     }
 
     if (flash.notice) {
-      color = 'blue'
+      alert_type = 'alert-info'
       msg = flash.notice
     }
 
     if (flash.success) {
-      color = 'green'
+      alert_type = 'alert-success'
       msg = flash.success
     }
   }
 </script>
 
 {#if show}
-  <div class="mx-auto max-w-7xl rounded-md bg-{color}-50 p-4 mb-4">
-    <div class="flex">
-      <div class="flex-shrink-0">
-        <svg class="h-5 w-5 text-{color}-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-        </svg>
-      </div>
-      <div class="ml-3">
-        <h3 class="text-sm font-medium text-{color}-800">{msg}</h3>
-      </div>
-    </div>
+  <div class="alert {alert_type}" role="alert">
+    {msg}
   </div>
 {/if}

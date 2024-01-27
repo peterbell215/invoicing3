@@ -1,5 +1,4 @@
 class ClientPolicy < ApplicationPolicy
-
   def create?
     user.admin?
   end
