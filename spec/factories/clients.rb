@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :client do
     name      { 'Test Client' }
+    email     { 'test.client@test.com' }
     address1  { 'The Test Avenue' }
     town      { 'Cambridge' }
     postcode  { 'CB99 1TA' }

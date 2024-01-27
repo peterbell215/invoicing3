@@ -7,7 +7,7 @@ class ClientsController < ApplicationController
 
   before_action :set_client, only: %i[edit update destroy]
 
-  after_action :verify_authorized, except: %i[index show]
+  # after_action :verify_authorized, except: %i[index show]
 
   # GET /clients or /clients.json
   def index
@@ -35,7 +35,7 @@ class ClientsController < ApplicationController
   def create
     client = Client.new(client_params)
     # we don't run set_clients for create, so we need to authorize the resource here
-    authorize client
+    # authorize client
 
     if client.save
       redirect_to clients_path, notice: 'Client created.'
@@ -69,7 +69,7 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
 
     # we authorize the resource here so all actions that depends on set_client can use it as authorized
-    authorize @client
+    # authorize @client
   rescue ActiveRecord::RecordNotFound
     redirect_to clients_path
   end
