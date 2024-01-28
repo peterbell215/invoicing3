@@ -45,8 +45,7 @@
               <FormInput {form} field="postcode" label_name="Postcode" on:blur={onBlur}/>
             </div>
           </div>
-          <!-- Town input -->
-          <!-- Postcode input -->
+
 
           {#if $form.errors.title}
             <div class="form-error">{$form.errors.title}</div>
