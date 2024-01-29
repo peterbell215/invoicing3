@@ -42,7 +42,7 @@ class Client < ApplicationRecord
       # Something has changed, so ...
       if active_session_charge.persisted?
         # If this is a persisted (ie existing) session_charge, then amend date period and add the new record.
-        active_session_charge.update!(to: Date.today - 1.day)
+        active_session_charge.update!(to: Time.zone.today - 1.day)
         _build_active_session_charge(rate)
       else
         # If not yet persisted, then update existing unsaved record.
@@ -53,7 +53,7 @@ class Client < ApplicationRecord
   end
 
   def _build_active_session_charge(rate)
-    self.session_charges << SessionCharge.new(from: Date.today, to: nil, hourly_charge_rate: rate)
+    self.session_charges << SessionCharge.new(from: Time.zone.today, to: nil, hourly_charge_rate: rate)
   end
 
   # Returns the current session_charge record.
@@ -68,8 +68,8 @@ class Client < ApplicationRecord
   def session_charges_must_not_overlap
     overlap_error = SessionCharge.overlap?(self.session_charges)
 
-    if overlap_error
-      self.errors.add(:session_charges, "Session charge to #{overlap_error.to} overlaps with its successor")
-    end
+    return unless overlap_error
+
+    self.errors.add(:session_charges, "Session charge to #{overlap_error.to} overlaps with its successor")
   end
 end

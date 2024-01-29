@@ -2,9 +2,6 @@
 
 # Controller to handle REST-ful requests for Client
 class ClientsController < ApplicationController
-  include Auth
-  # skip_before_action :authenticate_user!, only: %i[index show]
-
   before_action :set_client, only: %i[edit update destroy]
 
   after_action :verify_authorized, except: %i[index show]
@@ -28,7 +25,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1/edit
   def edit
-    render inertia: 'Clients/Edit', props: { client: @client.as_json(only: %i[id title body]) }
+    render inertia: 'Clients/Edit', props: { client: @client.as_json }
   end
 
   # POST /clients or /clients.json

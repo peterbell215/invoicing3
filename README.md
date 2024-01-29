@@ -5,8 +5,12 @@ Application uses RoR for the backend and Svelte.js for the frontend.  Designed t
 build a modern SPA using these.  In order to make these work together it also uses Vite and Inertia.js.  The approach
 was originally described [Setting up a new Rails 7 app with Vite, Inertia, and Svelte](https://dev.to/buhrmi/setting-up-a-new-rails-7-app-with-vite-inertia-and-svelte-c9e).
 Some ideas, particularly around the structure of the Svelte setup within the Rails, are lifted from here:
-[Creating your first Inertia Rails app](https://way-too-mainstream.vercel.app/articles/creating-first-inertia-rails-app).  Finally [Adding Authentication to Inertia Rails app](https://way-too-mainstream.vercel.app/articles/add-auth-to-inertia-rails-app)
-shows how to use Devise with Svelte for authentication.
+[Creating your first Inertia Rails app](https://way-too-mainstream.vercel.app/articles/creating-first-inertia-rails-app).  [Adding Authentication to Inertia Rails app](https://way-too-mainstream.vercel.app/articles/add-auth-to-inertia-rails-app)
+shows how to use Devise with Svelte for authentication.  This shows how to use Devise for authentication.
+Once that is working, best to switch to using Pundit to perform authorization.  This removes the need for
+authenication calls to Devise.  Details in
+[Adding Authorization and Flash Messages to Inertia Rails app](https://way-too-mainstream.vercel.app/articles/add-authorization-flash-to-inertia-rails-app).
+
 
 In order to keep the Javascript side as easy as possible, we use npm in preferrence to yarn.
 
@@ -39,3 +43,4 @@ when Rails did not yet support the concept.  _System_ tests were introduced in t
 Most of the on-line guides about how to get Devise working using RSpec for doing end-to-end tests describe it using
 Feature test.  However, feature tests are much more fidely to setup.  By contrast, system tests generally work well
 out-of-the-box.  Devise and Warden also provides some nice test helpers for system tests. 
+

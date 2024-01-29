@@ -8,7 +8,7 @@ class ClientPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    user.admin?
   end
 
   def update?
