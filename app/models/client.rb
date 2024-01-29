@@ -6,6 +6,9 @@ class Client < ApplicationRecord
   has_many :session_charges, dependent: :destroy
 
   # There must be at least one session charge setup for the client
+  validates :name, :email, :address1, :town, presence: true
+  validates :postcode, format: { with: /\A[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}\z/i, message: "is badly formed postcode" }
+
   validates :session_charges, presence: true
   validate :session_charges_must_not_overlap
 

@@ -11,6 +11,21 @@ describe 'Client' do
     end
   end
 
+  describe 'validations' do
+    %i[name email address1 town postcode].each do |field|
+      it "flags an empty #{field} " do
+        test_client = build :client, field => nil
+        expect(test_client).not_to be_valid
+      end
+    end
+
+    example_group 'postcode' do
+      specify { expect(build :client, postcode: 'CB1 1TT').to be_valid }
+      specify { expect(build :client, postcode: 'cb1 1tt').to be_valid }
+      specify { expect(build :client, postcode: 'cb999 111').not_to be_valid }
+    end
+  end
+
   describe '#current_rate' do
     context 'when a new record is built with a nil value for hourly_charge' do
       subject(:test_client) { build(:client) }
