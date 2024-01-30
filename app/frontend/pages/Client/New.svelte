@@ -1,6 +1,7 @@
 <script>
   import { useForm } from '@inertiajs/svelte'
   import FormInput from "~/components/FormInput.svelte";
+  import { createEventDispatcher } from "svelte";
 
   let form = useForm({
     name: null,
@@ -11,8 +12,15 @@
     postcode: null
   })
 
+  const dispatch = createEventDispatcher();
+
   function submit() {
-    $form.post('/clients')
+    $form.post('/clients', {
+      onSuccess: () => {
+        $form.reset();
+        dispatch('successfulSubmit');
+      }
+    });
   }
 
   function onBlur(event) {
