@@ -20,12 +20,14 @@ class ClientsController < ApplicationController
 
   # GET /clients/new
   def new
-    render inertia: 'Clients/New'
+    authorize Client
+
+    render inertia: 'Client/New'
   end
 
   # GET /clients/1/edit
   def edit
-    render inertia: 'Clients/Edit', props: { client: @client.as_json }
+    render inertia: 'Client/Edit', props: { client: @client.as_json }
   end
 
   # POST /clients or /clients.json

@@ -18,10 +18,9 @@
 <h1>All Clients</h1>
 
 {#if admin}
-  <button on:click={toggleShow}>New Client</button>
-  {#if show}
-    <New on:successfulSubmit={hideNewClient}/>
-  {/if}
+  <button type="button" use:inertia="{{ href: '/clients/new' }}" class="btn btn-primary" data-mdb-ripple-init>
+    New
+  </button>
 {/if}
 
 <table class="table table-striped">
