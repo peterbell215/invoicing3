@@ -12,13 +12,10 @@
         postcode: null
     })
 
-    const dispatch = createEventDispatcher();
-
     function submit() {
         $form.post('/clients', {
             onSuccess: () => {
                 $form.reset();
-                dispatch('successfulSubmit');
             }
         });
     }
