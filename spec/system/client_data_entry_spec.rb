@@ -26,10 +26,7 @@ RSpec.describe 'Client Administration' do
 
     click_button 'Submit'
 
-    expect(page.find('div .alert')).to have_content('Client created.')
-
-    saved_client = Client.find_by(name: client[:name])
-    expect(saved_client).to have_attributes(client)
+    check_new_client(client)
   end
 
   def fill_in_new_client(client)
@@ -38,10 +35,10 @@ RSpec.describe 'Client Administration' do
     end
   end
 
-  def check_new_client(model, client)
+  def check_new_client(client)
+    expect(page.find('div .alert')).to have_content('Client created.')
 
-  end
-  def check_new_client
-    new_client = Client.find_by(name:'Test Client')
+    saved_client = Client.find_by(name: client[:name])
+    expect(saved_client).to have_attributes(client)
   end
 end
