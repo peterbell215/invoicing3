@@ -12,8 +12,6 @@
         postcode: null
     })
 
-    let validated = false;
-
     const dispatch = createEventDispatcher();
 
     function submit() {
@@ -21,9 +19,6 @@
             onSuccess: () => {
                 $form.reset();
                 dispatch('successfulSubmit');
-            },
-            onError: () => {
-                validated = true;
             }
         });
     }
