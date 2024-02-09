@@ -12,7 +12,7 @@
         postcode: null
     })
 
-    let validated = undefined;
+    let validated = false;
 
     const dispatch = createEventDispatcher();
 
@@ -23,7 +23,7 @@
                 dispatch('successfulSubmit');
             },
             onError: () => {
-                $validated = 'was-validated';
+                validated = true;
             }
         });
     }
@@ -42,7 +42,7 @@
                 <h5 class="mb-0">Billing Details</h5>
             </div>
             <div class="card-body">
-                <form on:submit|preventDefault={submit} class={$validated}>
+                <form on:submit|preventDefault={submit} class='needs-validation' novalidate>
                     <FormInput {form} field="name" label_name="Name"/>
                     <FormInput {form} field="email" type="email" label_name="Email"/>
                     <FormInput {form} field="address1" label_name="Address Line 1"/>

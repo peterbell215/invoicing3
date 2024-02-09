@@ -52,5 +52,13 @@ nice styling with Bootstrap of forms - particularly to highlight errors.
 in a specific way that is different from how Inertia.js does.  In the end, I found that the best approach has been to
 use Svelte natively and use standard Bootstrap styling for showing errors.
 
-I have created my own component `FormInput.svelte` to provide error display.
+Another confusing area around validation is which classes to apply where.  Key conclusions from several hours of
+experimentation:
+- the form needs to include the `novalidate` tag.  OTherwise, the browser may insert extra stuff in.
+- the form must not include the class 'was-validated' as this seems to set all fields by default to show as having
+  passed validation, even when individual fields are flagged as failing validation
+- any field failing validation needs to have the class `is-invalid` set.  This makes the surrounding box red and puts a
+  warning in the box.
+- the error feedback `<div>` needs to have the class `invalid-feedback`
 
+I have created my own component `FormInput.svelte` to provide error display.
