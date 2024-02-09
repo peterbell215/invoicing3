@@ -22,7 +22,7 @@
   <div class="col-3 mx-auto text-center border">
     <form on:submit|preventDefault={submit}>
       <!-- Email input -->
-      <div data-mdb-input-init class="form-outline mb-4">
+      <div class="form-outline mb-4">
         <input type="email" id="email"
                class="form-control {($form.user.email != null) ? 'active' : ''}"
                bind:value={$form.user.email} />
@@ -33,7 +33,7 @@
       {/if}
 
       <!-- Password input -->
-      <div data-mdb-input-init class="form-outline mb-4">
+      <div class="form-outline mb-4">
         <input type="password" id="password"
                class="form-control {($form.user.password != null) ? 'active' : ''}"
                bind:value={$form.user.password}/>

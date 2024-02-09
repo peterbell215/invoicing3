@@ -44,3 +44,13 @@ Most of the on-line guides about how to get Devise working using RSpec for doing
 Feature test.  However, feature tests are much more fidely to setup.  By contrast, system tests generally work well
 out-of-the-box.  Devise and Warden also provides some nice test helpers for system tests. 
 
+### Forms
+This has been a difficult area.  I am using Bootstrap for styling.  There are a few component libraries that provide
+nice styling with Bootstrap of forms - particularly to highlight errors.
+[Sveltestrap](https://sveltestrap.js.org/?path=/docs/sveltestrap-overview--docs) and
+[mdbsvelte](https://github.com/mdbootstrap/mdbsvelte) are two I had a go at using.  However, both expect Svelte to work
+in a specific way that is different from how Inertia.js does.  In the end, I found that the best approach has been to
+use Svelte natively and use standard Bootstrap styling for showing errors.
+
+I have created my own component `FormInput.svelte` to provide error display.
+

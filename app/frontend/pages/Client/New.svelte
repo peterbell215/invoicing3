@@ -12,6 +12,8 @@
         postcode: null
     })
 
+    let validated = undefined;
+
     const dispatch = createEventDispatcher();
 
     function submit() {
@@ -19,6 +21,9 @@
             onSuccess: () => {
                 $form.reset();
                 dispatch('successfulSubmit');
+            },
+            onError: () => {
+                $validated = 'was-validated';
             }
         });
     }
@@ -37,9 +42,7 @@
                 <h5 class="mb-0">Billing Details</h5>
             </div>
             <div class="card-body">
-                <form on:submit|preventDefault={submit}>
-
-                    <!-- Email input -->
+                <form on:submit|preventDefault={submit} class={$validated}>
                     <FormInput {form} field="name" label_name="Name"/>
                     <FormInput {form} field="email" type="email" label_name="Email"/>
                     <FormInput {form} field="address1" label_name="Address Line 1"/>
@@ -53,7 +56,6 @@
                             <FormInput {form} field="postcode" label_name="Postcode" on:blur={onBlur}/>
                         </div>
                     </div>
-
 
                     {#if $form.errors.title}
                         <div class="form-error">{$form.errors.title}</div>

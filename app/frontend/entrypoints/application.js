@@ -1,6 +1,4 @@
 import 'bootstrap'
-import * as mdb from 'mdb-ui-kit'; // lib
-window.mdb = mdb;
 
 import { createInertiaApp } from '@inertiajs/svelte';
 import Layout from '../components/Layouts/Layout.svelte';

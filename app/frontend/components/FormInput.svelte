@@ -9,13 +9,13 @@
     }
 </script>
 
-<div data-mdb-input-init class="form-outline mb-4">
+<div class="form-outline mb-4">
+    <label class="form-label" for="name">{label_name}</label>
     <input use:typeAction id="{field}"
            class="form-control {($form[field] != null) ? 'active' : ''}"
            bind:value={$form[field]} />
-    <label class="form-label" for="name">{label_name}</label>
+    {#if $form.errors[field]!==undefined}
+        <div class="invalid-feedback">{$form.errors[field]}</div>
+    {/if}
 </div>
 
-{#if $form.errors[field]!==undefined}
-    <div class="form-error">{$form.errors[field]}</div>
-{/if}

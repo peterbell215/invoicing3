@@ -18,7 +18,7 @@
 <h1>All Clients</h1>
 
 {#if admin}
-  <button type="button" use:inertia="{{ href: '/clients/new' }}" class="btn btn-primary" data-mdb-ripple-init>
+  <button type="button" use:inertia="{{ href: '/clients/new' }}" class="btn btn-primary">
     New
   </button>
 {/if}
