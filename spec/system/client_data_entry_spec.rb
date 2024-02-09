@@ -6,6 +6,8 @@ require 'vite_rails'
 
 RSpec.describe 'Client Administration' do
   let(:user) { FactoryBot::create :user }
+  let(:admin_user) { FactoryBot::create :admin_user }
+
   let(:client) { FactoryBot.attributes_for :client }
 
   it 'shows the Client page with New Button' do
@@ -17,13 +19,14 @@ RSpec.describe 'Client Administration' do
   end
 
   scenario 'adding a new user', js: true do
-    sign_in user
-    visit clients_path
-    click_button 'New'
+    sign_in admin_user
+    visit new_client_path
 
     fill_in_new_client(client)
 
     click_button 'Submit'
+
+    expect(page.find('div .alert')).to have_content('Client created.')
 
     saved_client = Client.find_by(name: client[:name])
     expect(saved_client).to have_attributes(client)
