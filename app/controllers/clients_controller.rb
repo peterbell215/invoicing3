@@ -2,7 +2,7 @@
 
 # Controller to handle REST-ful requests for Client
 class ClientsController < ApplicationController
-  before_action :set_client, only: %i[edit update destroy]
+  before_action :set_client, only: %i[show edit update destroy]
 
   after_action :verify_authorized, except: %i[index show]
 
@@ -10,7 +10,7 @@ class ClientsController < ApplicationController
   def index
     clients = Client.all
 
-    render inertia: 'Client/Index', props: { clients: clients.as_json }
+    render inertia: 'Clients/Index', props: { clients: clients.as_json }
   end
 
   # GET /clients/1 or /clients/1.json
@@ -22,12 +22,12 @@ class ClientsController < ApplicationController
   def new
     authorize Client
 
-    render inertia: 'Client/New'
+    render inertia: 'Clients/New'
   end
 
   # GET /clients/1/edit
   def edit
-    render inertia: 'Client/Edit', props: { client: @client.as_json }
+    render inertia: 'Clients/Edit', props: { client: @client.as_json }
   end
 
   # POST /clients or /clients.json

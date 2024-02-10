@@ -1,17 +1,8 @@
 <script>
-  import New from './New.svelte'
   import { inertia, page, Link } from '@inertiajs/svelte'
 
   let admin = $page.props.auth;
-  let show = false;
 
-  function toggleShow() {
-    show = !show;
-  }
-
-  function hideNewClient() {
-    show = false;
-  }
   export let clients
 </script>
 

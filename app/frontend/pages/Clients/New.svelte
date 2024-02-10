@@ -1,6 +1,6 @@
 <script>
     import { useForm } from '@inertiajs/svelte'
-    import ClientForm from "~/pages/Client/ClientForm.svelte";
+    import ClientForm from "~/pages/Clients/ClientForm.svelte";
 
     let form = useForm({
         name: null,
