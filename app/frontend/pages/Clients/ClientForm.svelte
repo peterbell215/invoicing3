@@ -72,7 +72,7 @@
                             <div class="form-error">{$form.errors.body}</div>
                         {/if}
                         <button type="submit" class="btn btn-primary btn-block" disabled={$form.processing}>Submit</button>
-                        {/if}
+                    {/if}
             </form>
             </div>
         </div>
