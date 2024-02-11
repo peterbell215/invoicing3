@@ -2,17 +2,22 @@
 
 # Controller to handle REST-ful requests for MeetingCharges
 class MeetingChargesController < ApplicationController
-  before_action :set_session_charge, only: %i[show edit update destroy]
+  # before_action :set_meeting_charge, only: %i[show edit update destroy]
+  before_action :set_client
 
-  after_action :verify_authorized, except: %i[index show]
+  # @todo Add authorization
+  # after_action :verify_authorized
 
   # GET /clients or /clients.json
   def index
-    clients = Client.all
+    meeting_charges = @client.meeting_charges.all
 
-    render inertia: 'Clients/Index', props: { clients: clients.as_json }
+    render inertia: 'MeetingCharges/Index',
+           props: { client: @client.as_json(only: [:id, :name]), meeting_charges: meeting_charges.as_json }
   end
 
+=begin
+  # @todo
   # GET /clients/1 or /clients/1.json
   def show
     render inertia: 'Clients/Show', props: { client: @client.as_json }
@@ -61,23 +66,29 @@ class MeetingChargesController < ApplicationController
       redirect_to clients_path, alert: 'Client cannot be deleted!'
     end
   end
+=end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_client
-    @client = Client.find(params[:id])
+    @client = Client.find(params[:client_id])
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_meeting_charge
+    @meeting_charge =
 
     # we authorize the resource here so all actions that depends on set_client can use it as authorized
-    authorize @client
+    authorize @meeting_charge
 
   rescue ActiveRecord::RecordNotFound
     redirect_to clients_path
   end
 
+
   # Only allow a list of trusted parameters through.
   def client_params
-    params.require(:client).permit!
+    params.require(:meeting_charge).permit!
   end
 end
 
