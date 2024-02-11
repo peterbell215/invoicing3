@@ -7,7 +7,9 @@ Rails.application.routes.draw do
     match 'logout', to: 'users/sessions#destroy', as: :destroy_user_session, via: Devise.mappings[:user].sign_out_via
   end
 
-  resources :clients
+  resources :clients do
+    resources :meeting_charges
+  end
 
   root 'static#home'
 end
