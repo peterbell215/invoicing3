@@ -6,23 +6,28 @@
   export let clients
 </script>
 
-<h1>All Clients</h1>
+<div class="mx-auto col-md-8 mb-4 py-4">
+  <div class="card mb-4">
+    <div class="card-header py-3">
+      <h1 class="mb-0">Client List</h1>
+    </div>
+    <div class="card-body">
+      {#if admin}
+        <button type="button" use:inertia="{{ href: '/clients/new' }}" class="btn btn-primary">
+          New
+        </button>
+      {/if}
 
-{#if admin}
-  <button type="button" use:inertia="{{ href: '/clients/new' }}" class="btn btn-primary">
-    New
-  </button>
-{/if}
-
-<table class="table table-striped">
-  <tbody>
-    {#each clients as client}
-      <tr>
-        <td><Link href="/clients/{client.id}">{client.name}</Link>
-        <td><button class="btn btn-primary" use:inertia="{{ href: '/clients/'+clients.id, method: 'delete' }}" type="button">Delete</button></td>
-      </tr>
-    {/each}
-  </tbody>
-
-</table>
-
+      <table class="table table-striped">
+        <tbody>
+          {#each clients as client}
+            <tr>
+              <td><Link href="/clients/{client.id}">{client.name}</Link>
+              <td><button class="btn btn-primary" use:inertia="{{ href: '/clients/'+clients.id, method: 'delete' }}" type="button">Delete</button></td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
