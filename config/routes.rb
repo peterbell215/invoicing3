@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   resources :clients do
-    resources :meeting_charges
+    resources :prices
   end
 
   root 'static#home'

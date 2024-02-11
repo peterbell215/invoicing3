@@ -30,7 +30,7 @@ describe 'Client' do
     context 'when a new record is built with a nil value for hourly_charge' do
       subject(:test_client) { build(:client) }
 
-      it 'autofills the meeting_charge.' do
+      it 'autofills the price.' do
         expect(test_client.current_rate).to eq Money.new(6000)
       end
     end
@@ -40,7 +40,7 @@ describe 'Client' do
 
       let(:read_back_client) { Client.find_by(name: 'Test Client') }
 
-      it 'creates a child record meeting_charge with a default value' do
+      it 'creates a child record price with a default value' do
         expect(read_back_client.current_rate).to eq Money.new(6000)
       end
     end
@@ -50,7 +50,7 @@ describe 'Client' do
     context 'when a new client record is built with current_rate set' do
       subject(:test_client) { Client.new(current_rate: Money.new(7000)) }
 
-      it 'creates a corresponding meeting_charge child' do
+      it 'creates a corresponding Price child' do
         expect(test_client.current_rate).to eq Money.new(7000)
       end
     end
@@ -60,7 +60,7 @@ describe 'Client' do
 
       let(:read_back_client) { Client.find_by(name: 'Test Client') }
 
-      it 'creates a corresponding meeting_charge child' do
+      it 'creates a corresponding Price child' do
         expect(read_back_client.current_rate).to eq Money.new(7000)
       end
     end
@@ -68,29 +68,28 @@ describe 'Client' do
     context 'when the same current_rate is set a 2nd time' do
       subject(:test_client) { Client.create!(attributes_for(:client).merge(current_rate: Money.new(7000))) }
 
-      it 'does not do an update to the current meeting_charge record' do
+      it 'does not do an update to the current Price record' do
         test_client.current_rate = Money.new(7000)
-        expect(test_client.current_meeting_charge.hourly_charge_rate_pence_changed?).to be_falsey
+        expect(test_client.current_price.hourly_charge_rate_pence_changed?).to be_falsey
       end
     end
   end
 
-  describe 'ensure no overlaps on meeting_charges' do
-    context 'when non-overlapping meeting_charges exist' do
-      subject(:test_client) { build(:client_with_meeting_charges) }
+  describe 'ensure no overlaps on Price' do
+    context 'when non-overlapping Prices exist' do
+      subject(:test_client) { build(:client_with_prices) }
 
       it 'passes validation' do
         expect(test_client).to be_valid
       end
     end
 
-    context 'when overlapping meeting_charges exist' do
-      subject(:test_client) { build(:client_with_meeting_charges, gap: -5.days) }
+    context 'when overlapping Prices exist' do
+      subject(:test_client) { build(:client_with_prices, gap: -5.days) }
 
       it 'fails validation' do
         expect(test_client).not_to be_valid
-        expect(test_client.errors[:meeting_charges].first)
-          .to eq 'meeting charge to 2023-06-01 overlaps with its successor'
+        expect(test_client.errors[:prices].first).to eq 'price to 2023-06-01 overlaps with its successor'
       end
     end
   end

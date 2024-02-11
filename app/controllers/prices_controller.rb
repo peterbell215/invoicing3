@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-# Controller to handle REST-ful requests for MeetingCharges
-class MeetingChargesController < ApplicationController
-  # before_action :set_meeting_charge, only: %i[show edit update destroy]
+# Controller to handle REST-ful requests for Prices
+class PricesController < ApplicationController
   before_action :set_client
 
   # @todo Add authorization
@@ -10,10 +9,10 @@ class MeetingChargesController < ApplicationController
 
   # GET /clients or /clients.json
   def index
-    meeting_charges = @client.meeting_charges.all
+    prices = @client.prices.all
 
-    render inertia: 'MeetingCharges/Index',
-           props: { client: @client.as_json(only: [:id, :name]), meeting_charges: meeting_charges.as_json }
+    render inertia: 'Prices/Index',
+           props: { client: @client.as_json(only: [:id, :name]), prices: prices.as_json }
   end
 
 =begin
@@ -74,21 +73,10 @@ class MeetingChargesController < ApplicationController
     @client = Client.find(params[:client_id])
   end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_meeting_charge
-    @meeting_charge =
-
-    # we authorize the resource here so all actions that depends on set_client can use it as authorized
-    authorize @meeting_charge
-
-  rescue ActiveRecord::RecordNotFound
-    redirect_to clients_path
-  end
-
 
   # Only allow a list of trusted parameters through.
   def client_params
-    params.require(:meeting_charge).permit!
+    params.require(:price).permit!
   end
 end
 

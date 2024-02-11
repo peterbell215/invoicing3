@@ -3,18 +3,18 @@
 # Provides details of a client including address.
 class Client < ApplicationRecord
   has_many :meetings, dependent: :destroy
-  has_many :meeting_charges, dependent: :destroy
+  has_many :prices, dependent: :destroy
 
-  # There must be at least one meeting charge setup for the client
+  # There must be at least one mprice record setup for the client
   validates :name, :email, :address1, :town, presence: true
   validates :postcode, format: { with: /\A[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}\z/i, message: "is badly formed postcode" }
 
-  validates :meeting_charges, presence: true
-  validate :meeting_charges_must_not_overlap
+  validates :prices, presence: true
+  validate :prices_must_not_overlap
 
-  # Add a default meeting_charges record if none exists.
+  # Add a default prices record if none exists.
   after_initialize do |client|
-    client.meeting_charges.build(from: Time.zone.today, hourly_charge_rate: 60) if client.meeting_charges.empty?
+    client.prices.build(from: Time.zone.today, hourly_charge_rate: 60) if client.prices.empty?
   end
 
   def as_json(options = {})
@@ -25,51 +25,51 @@ class Client < ApplicationRecord
 
   # @return Money
   def current_rate
-    self.current_meeting_charge&.hourly_charge_rate
+    self.current_price&.hourly_charge_rate
   end
 
-  # Sets the current rate for meetings if different from current rate as held in database.  Updates the
-  # current rate in the database to be up to yesterday, and creates a new meeting_charges record starting
+  # Sets the current price for meetings if different from current price as held in database.  Updates the
+  # current rate in the database to be up to yesterday, and creates a new prices record starting
   # today with an open ended charge period.
   # @return [Money]
   def current_rate=(rate)
-    active_meeting_charge = self.current_meeting_charge
+    active_price = self.current_price
 
-    if active_meeting_charge.nil?
+    if active_price.nil?
       # No record exists yet, so create a new one.
-      _build_active_meeting_charge(rate)
-    elsif active_meeting_charge.hourly_charge_rate != rate
+      _build_active_price(rate)
+    elsif active_price.hourly_charge_rate != rate
       # Something has changed, so ...
-      if active_meeting_charge.persisted?
-        # If this is a persisted (ie existing) meeting_charge, then amend date period and add the new record.
-        active_meeting_charge.update!(to: Time.zone.today - 1.day)
-        _build_active_meeting_charge(rate)
+      if active_price.persisted?
+        # If this is a persisted (ie existing) price, then amend date period and add the new record.
+        active_price.update!(to: Time.zone.today - 1.day)
+        _build_active_price(rate)
       else
         # If not yet persisted, then update existing unsaved record.
-        active_meeting_charge.hourly_charge_rate = rate
+        active_price.hourly_charge_rate = rate
       end
     end
     rate
   end
 
-  def _build_active_meeting_charge(rate)
-    self.meeting_charges << MeetingCharge.new(from: Time.zone.today, to: nil, hourly_charge_rate: rate)
+  def _build_active_price(rate)
+    self.prices << Price.new(from: Time.zone.today, to: nil, hourly_charge_rate: rate)
   end
 
-  # Returns the current meeting_charge record.
-  def current_meeting_charge
+  # Returns the current price record.
+  def current_price
     if self.id
-      self.meeting_charges.find_by(to: nil)
+      self.prices.find_by(to: nil)
     else
-      self.meeting_charges.find { |meeting_charge| meeting_charge.to.nil? }
+      self.prices.find { |price| price.to.nil? }
     end
   end
 
-  def meeting_charges_must_not_overlap
-    overlap_error = MeetingCharge.overlap?(self.meeting_charges)
+  def prices_must_not_overlap
+    overlap_error = Price.overlap?(self.prices)
 
     return unless overlap_error
 
-    self.errors.add(:meeting_charges, "meeting charge to #{overlap_error.to} overlaps with its successor")
+    self.errors.add(:prices, "price to #{overlap_error.to} overlaps with its successor")
   end
 end

@@ -2,7 +2,7 @@
     import {Link} from "@inertiajs/svelte";
 
     export let client;
-    export let meeting_charges;
+    export let prices;
 </script>
 
 <h1>History of charges for {client.name}</h1>
@@ -16,11 +16,11 @@
         </tr>
     </thead>
     <tbody>
-        {#each meeting_charges as meeting_charge}
+        {#each prices as price}
             <tr>
-                <td>{meeting_charge.from}</td>
-                <td>{meeting_charge?.to}</td>
-                <td>{meeting_charge.hourly_charge_rate_pence}</td>
+                <td>{price.from}</td>
+                <td>{price?.to}</td>
+                <td>{price.hourly_charge_rate_pence}</td>
             </tr>
         {/each}
     </tbody>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_11_052928) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_11_171749) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,17 +27,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_052928) do
     t.index ["email"], name: "index_clients_on_email", unique: true
   end
 
-  create_table "meeting_charges", force: :cascade do |t|
-    t.bigint "client_id", null: false
-    t.date "from"
-    t.date "to"
-    t.integer "hourly_charge_rate_pence", default: 0, null: false
-    t.string "hourly_charge_rate_currency", default: "GBP", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_meeting_charges_on_client_id"
-  end
-
   create_table "meetings", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.datetime "start", null: false
@@ -47,6 +36,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_052928) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_meetings_on_client_id"
+  end
+
+  create_table "prices", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.date "from"
+    t.date "to"
+    t.integer "hourly_charge_rate_pence", default: 0, null: false
+    t.string "hourly_charge_rate_currency", default: "GBP", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_prices_on_client_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -62,6 +62,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_052928) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "meeting_charges", "clients"
   add_foreign_key "meetings", "clients"
+  add_foreign_key "prices", "clients"
 end

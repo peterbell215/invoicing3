@@ -8,16 +8,16 @@ FactoryBot.define do
     town      { 'Cambridge' }
     postcode  { 'CB99 1TA' }
 
-    factory :client_with_meeting_charges do
+    factory :client_with_prices do
       transient do
         gap { 1.day }
       end
 
-      meeting_charges {
-        3.times.each_with_object([]) do |loop, meeting_charges_array|
-          from = meeting_charges_array.empty? ? Date.new(2022, 12, 1) : meeting_charges_array.last.to + gap
+      prices {
+        3.times.each_with_object([]) do |loop, prices_array|
+          from = prices_array.empty? ? Date.new(2022, 12, 1) : prices_array.last.to + gap
           to = loop < 2 ? from + 6.months : nil
-          meeting_charges_array.push(association(:meeting_charge, from: from, to: to))
+          prices_array.push(association(:price, from: from, to: to))
         end
       }
     end
