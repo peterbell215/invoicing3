@@ -2,19 +2,19 @@
 
 # Provides details of a client including address.
 class Client < ApplicationRecord
-  has_many :sessions, dependent: :destroy
-  has_many :session_charges, dependent: :destroy
+  has_many :meetings, dependent: :destroy
+  has_many :meeting_charges, dependent: :destroy
 
-  # There must be at least one session charge setup for the client
+  # There must be at least one meeting charge setup for the client
   validates :name, :email, :address1, :town, presence: true
   validates :postcode, format: { with: /\A[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}\z/i, message: "is badly formed postcode" }
 
-  validates :session_charges, presence: true
-  validate :session_charges_must_not_overlap
+  validates :meeting_charges, presence: true
+  validate :meeting_charges_must_not_overlap
 
-  # Add a default session_charges record if none exists.
+  # Add a default meeting_charges record if none exists.
   after_initialize do |client|
-    client.session_charges.build(from: Time.zone.today, hourly_charge_rate: 60) if client.session_charges.empty?
+    client.meeting_charges.build(from: Time.zone.today, hourly_charge_rate: 60) if client.meeting_charges.empty?
   end
 
   def as_json(options = {})
@@ -25,51 +25,51 @@ class Client < ApplicationRecord
 
   # @return Money
   def current_rate
-    self.current_session_charge&.hourly_charge_rate
+    self.current_meeting_charge&.hourly_charge_rate
   end
 
-  # Sets the current rate for sessions if different from current rate as held in database.  Updates the
-  # current rate in the database to be up to yesterday, and creates a new session_charges record starting
+  # Sets the current rate for meetings if different from current rate as held in database.  Updates the
+  # current rate in the database to be up to yesterday, and creates a new meeting_charges record starting
   # today with an open ended charge period.
   # @return [Money]
   def current_rate=(rate)
-    active_session_charge = self.current_session_charge
+    active_meeting_charge = self.current_meeting_charge
 
-    if active_session_charge.nil?
+    if active_meeting_charge.nil?
       # No record exists yet, so create a new one.
-      _build_active_session_charge(rate)
-    elsif active_session_charge.hourly_charge_rate != rate
+      _build_active_meeting_charge(rate)
+    elsif active_meeting_charge.hourly_charge_rate != rate
       # Something has changed, so ...
-      if active_session_charge.persisted?
-        # If this is a persisted (ie existing) session_charge, then amend date period and add the new record.
-        active_session_charge.update!(to: Time.zone.today - 1.day)
-        _build_active_session_charge(rate)
+      if active_meeting_charge.persisted?
+        # If this is a persisted (ie existing) meeting_charge, then amend date period and add the new record.
+        active_meeting_charge.update!(to: Time.zone.today - 1.day)
+        _build_active_meeting_charge(rate)
       else
         # If not yet persisted, then update existing unsaved record.
-        active_session_charge.hourly_charge_rate = rate
+        active_meeting_charge.hourly_charge_rate = rate
       end
     end
     rate
   end
 
-  def _build_active_session_charge(rate)
-    self.session_charges << SessionCharge.new(from: Time.zone.today, to: nil, hourly_charge_rate: rate)
+  def _build_active_meeting_charge(rate)
+    self.meeting_charges << MeetingCharge.new(from: Time.zone.today, to: nil, hourly_charge_rate: rate)
   end
 
-  # Returns the current session_charge record.
-  def current_session_charge
+  # Returns the current meeting_charge record.
+  def current_meeting_charge
     if self.id
-      self.session_charges.find_by(to: nil)
+      self.meeting_charges.find_by(to: nil)
     else
-      self.session_charges.find { |session_charge| session_charge.to.nil? }
+      self.meeting_charges.find { |meeting_charge| meeting_charge.to.nil? }
     end
   end
 
-  def session_charges_must_not_overlap
-    overlap_error = SessionCharge.overlap?(self.session_charges)
+  def meeting_charges_must_not_overlap
+    overlap_error = MeetingCharge.overlap?(self.meeting_charges)
 
     return unless overlap_error
 
-    self.errors.add(:session_charges, "Session charge to #{overlap_error.to} overlaps with its successor")
+    self.errors.add(:meeting_charges, "meeting charge to #{overlap_error.to} overlaps with its successor")
   end
 end
