@@ -12,7 +12,7 @@ class PricesController < ApplicationController
     prices = @client.prices.all
 
     render inertia: 'Prices/Index',
-           props: { client: @client.as_json(only: [:id, :name]), prices: prices.as_json }
+           props: { client: @client.as_json(only: [:id, :name]), prices: prices.map(&:json_with_dinero) }
   end
 
 =begin

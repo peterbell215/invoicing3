@@ -15,4 +15,14 @@ class Price < ApplicationRecord
     overlapping_pair = prices.each_cons(2).find { |previous, following| previous.to >= following.from }
     overlapping_pair&.first
   end
+
+  def json_with_dinero
+    self.as_json(methods: [:hourly_charge_rate_as_dinero], except: [:hourly_charge_rate_pence, :hourly_charge_rate_currency])
+  end
+
+  # Provides a method to generate a hash with the fields needed to instantiate as a Dinero object in JS.
+  # @return [Hash]
+  def hourly_charge_rate_as_dinero
+    hourly_charge_rate.as_dinero
+  end
 end

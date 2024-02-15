@@ -16,6 +16,18 @@ module Invoicing3
       g.system_tests :rspec
     end
 
+    # Remove the core extensions from Zeitwerk.
+    # Thanks to https://stackoverflow.com/questions/58866709/how-can-i-extend-gem-class-in-rails-6-zeitwerk-without-breaking-code-reloading
+    # for this answer
+    overrides = "#{Rails.root}/lib"
+
+    Rails.autoloaders.main.ignore(overrides)
+    config.to_prepare do
+      Dir.glob("#{overrides}/**/*.rb").each do |override|
+        load override
+      end
+    end
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

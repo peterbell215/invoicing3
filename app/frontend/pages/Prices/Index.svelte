@@ -1,8 +1,11 @@
 <script>
     import {Link} from "@inertiajs/svelte";
+    import Dinero from 'dinero.js';
 
     export let client;
     export let prices;
+
+
 </script>
 
 <h1>History of charges for {client.name}</h1>
@@ -19,8 +22,8 @@
         {#each prices as price}
             <tr>
                 <td>{price.from}</td>
-                <td>{price?.to}</td>
-                <td>{price.hourly_charge_rate_pence}</td>
+                <td>{price?.to || ''}</td>
+                <td>{Dinero(price.hourly_charge_rate_as_dinero).toFormat('$0,0')}</td>
             </tr>
         {/each}
     </tbody>
