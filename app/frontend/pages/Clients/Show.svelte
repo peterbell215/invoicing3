@@ -6,5 +6,8 @@
 </script>
 
 <ClientForm {client} readonly=true>
-    <Link href="/clients/{client.id}/prices" class="btn btn-primary">Price History</Link>
+    <svelte:fragment slot="navigation-elements">
+        <Link href="/clients/{client.id}/edit" class="btn btn-primary">Edit</Link>
+        <Link href="/clients/{client.id}/prices" class="btn btn-primary">Price History</Link>
+    </svelte:fragment>
 </ClientForm>

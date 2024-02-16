@@ -14,7 +14,7 @@ RSpec.describe 'Client Administration' do
     sign_in user
     visit clients_path
 
-    expect(page).to have_content('All Clients')
+    expect(page).to have_content('Client List')
     expect(page).to have_button('New')
   end
 

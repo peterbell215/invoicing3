@@ -1,5 +1,5 @@
 <script>
-    import { useForm } from '@inertiajs/svelte'
+    import {Link, useForm} from '@inertiajs/svelte'
     import FormInput from "~/components/FormInput.svelte";
 
     export let client;
@@ -38,18 +38,16 @@
     }
 </script>
 
-<div class="mx-auto col-md-8 mb-4 py-4">
+<div class="mx-auto col-4 py-4">
     <div class="card mb-4">
         <div class="card-header py-3">
             <h5 class="mb-0">Client Details</h5>
         </div>
         <div class="card-body">
-            <slot />
-            <form on:submit|preventDefault={submit} class='needs-validation' inert="{readonly}" novalidate >
-                {#if $form.id!==undefined && !readonly}
-                    <input type="hidden" name="id" bind:value={$form.id} />
-                {/if}
+            <Link href="/clients/" class="btn btn-primary">Back</Link>
+            <slot name="navigation-elements" />
 
+            <form on:submit|preventDefault={submit} class='needs-validation' inert="{readonly}" novalidate >
                 <FormInput {form} field="name" label_name="Name"/>
                 <FormInput {form} field="email" type="email" label_name="Email"/>
                 <FormInput {form} field="address1" label_name="Address Line 1"/>
@@ -63,6 +61,8 @@
                         <FormInput {form} field="postcode" label_name="Postcode" on:blur={onBlur}/>
                     </div>
                 </div>
+
+                <slot name="form-elements"/>
 
                 {#if !readonly}
                     {#if $form.errors.title}

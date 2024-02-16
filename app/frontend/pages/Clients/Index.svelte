@@ -6,8 +6,8 @@
   export let clients
 </script>
 
-<div class="mx-auto col-md-8 mb-4 py-4">
-  <div class="card mb-4">
+<div class="mx-auto col-6 py-6">
+  <div class="card mb-6">
     <div class="card-header py-3">
       <h1 class="mb-0">Client List</h1>
     </div>

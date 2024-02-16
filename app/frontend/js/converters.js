@@ -4,6 +4,6 @@
  * @param {string} date_string
  * @return {string}
  */
-function format_date(date_string) {
+export function format_date(date_string) {
     return new Date(date_string)?.toLocaleDateString(undefined, { dateStyle: "medium"}) || "";
 }

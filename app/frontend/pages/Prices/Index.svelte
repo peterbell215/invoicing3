@@ -26,3 +26,5 @@
         {/each}
     </tbody>
 </table>
+
+<Link href="/clients/{client.id}" class="btn btn-primary">OK</Link>
