@@ -38,7 +38,6 @@
     }
 </script>
 
-
 <div class="mx-auto col-md-8 mb-4 py-4">
     <div class="card mb-4">
         <div class="card-header py-3">
