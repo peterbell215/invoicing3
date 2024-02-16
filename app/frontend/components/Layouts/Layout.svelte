@@ -7,7 +7,7 @@
 <main>
   <MainNav />
   <FlashMessages />
-  <div>
+  <div class="mx-auto col-md-8 mb-4 py-4">
     <slot />
   </div>
 </main>
