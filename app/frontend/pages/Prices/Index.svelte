@@ -5,7 +5,9 @@
     export let client;
     export let prices;
 
-
+    function format_date(date_string) {
+        return new Date(date_string)?.toLocaleDateString(undefined, { dateStyle: "medium"}) || "";
+    }
 </script>
 
 <h1>History of charges for {client.name}</h1>
@@ -21,7 +23,7 @@
     <tbody>
         {#each prices as price}
             <tr>
-                <td>{price.from}</td>
+                <td>{format_date(price.from)}</td>
                 <td>{price?.to || ''}</td>
                 <td>{Dinero(price.hourly_charge_rate_as_dinero).toFormat('$0,0')}</td>
             </tr>
