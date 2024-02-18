@@ -15,7 +15,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1 or /clients/1.json
   def show
-    render inertia: 'Clients/Show', props: { client: @client.as_json }
+    render inertia: 'Clients/Show', props: { client: @client.as_json(methods: :current_rate_as_dinero) }
   end
 
   # GET /clients/new
@@ -70,7 +70,6 @@ class ClientsController < ApplicationController
 
     # we authorize the resource here so all actions that depends on set_client can use it as authorized
     authorize @client
-
   rescue ActiveRecord::RecordNotFound
     redirect_to clients_path
   end

@@ -17,12 +17,11 @@ class Price < ApplicationRecord
   end
 
   def json_with_dinero
-    self.as_json(methods: [:hourly_charge_rate_as_dinero], except: [:hourly_charge_rate_pence, :hourly_charge_rate_currency])
+    self.as_json(methods: [:hourly_charge_rate_as_dinero],
+                 except: %i[hourly_charge_rate_pence hourly_charge_rate_currency])
   end
 
   # Provides a method to generate a hash with the fields needed to instantiate as a Dinero object in JS.
   # @return [Hash]
-  def hourly_charge_rate_as_dinero
-    hourly_charge_rate.as_dinero
-  end
+  delegate :as_dinero, to: :hourly_charge_rate, prefix: true
 end

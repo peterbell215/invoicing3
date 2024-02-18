@@ -29,6 +29,10 @@ class Client < ApplicationRecord
     self.current_price&.hourly_charge_rate
   end
 
+  def current_rate_as_dinero
+
+  end
+
   # Sets the current price for meetings if different from current price as held in database.  Updates the
   # current rate in the database to be up to yesterday, and creates a new prices record starting
   # today with an open ended charge period.
