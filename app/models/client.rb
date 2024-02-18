@@ -24,13 +24,17 @@ class Client < ApplicationRecord
     super((options || {}).merge({ methods: %i[current_rate] }))
   end
 
+  # Returns the current hourly rate for this client
+  #
   # @return Money
   def current_rate
     self.current_price&.hourly_charge_rate
   end
 
-  def current_rate_as_dinero
-
+  # returns since when the current hourly rate for this client applies
+  # @return Date
+  def current_rate_since
+    self.current_price&.from
   end
 
   # Sets the current price for meetings if different from current price as held in database.  Updates the

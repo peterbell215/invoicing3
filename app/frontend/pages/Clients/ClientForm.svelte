@@ -1,6 +1,8 @@
 <script>
     import {Link, useForm} from '@inertiajs/svelte'
     import FormInput from "~/components/FormInput.svelte";
+    import Dinero from "dinero.js";
+    import {format_date} from "@/js/converters.js";
 
     export let client;
     export let readonly = false;
@@ -12,7 +14,9 @@
         address1: client?.address1,
         address2: client?.address2,
         town: client?.town,
-        postcode: client?.postcode
+        postcode: client?.postcode,
+        current_rate: Dinero(client?.current_rate).toFormat('$0,0.00'),
+        current_rate_since: format_date(client?.current_rate_since)
     });
 
     function submit() {

@@ -13,15 +13,15 @@
     </svelte:fragment>
 
     <fieldset slot="form-elements" let:form class="form-group border p-3">
-        {@debug form}
+        {@debug client}
 
         <legend class="w-auto px-2">Pricing</legend>
         <div class="row">
             <div class="col">
-                <FormInput {form} field="current_rate_as_dinero" label_name="Current Hourly Charge"/>
+                <FormInput {form} field="current_rate" label_name="Current Hourly Charge"/>
             </div>
             <div class="col">
-                <FormInput {form} field="current_price_since" label_name="Since"/>
+                <FormInput {form} field="current_rate_since" label_name="Since"/>
             </div>
         </div>
     </fieldset>

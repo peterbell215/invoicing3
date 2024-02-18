@@ -46,6 +46,16 @@ describe 'Client' do
     end
   end
 
+  describe '#current_rate_since' do
+    context 'when a new record is built with a nil value for hourly_charge' do
+      subject(:test_client) { build(:client) }
+
+      it 'autofills the price.' do
+        expect(test_client.current_rate_since).to eq Date.today
+      end
+    end
+  end
+
   describe '#current_rate=' do
     context 'when a new client record is built with current_rate set' do
       subject(:test_client) { Client.new(current_rate: Money.new(7000)) }

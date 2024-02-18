@@ -15,7 +15,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1 or /clients/1.json
   def show
-    render inertia: 'Clients/Show', props: { client: @client.as_json(methods: :current_rate_as_dinero) }
+    render inertia: 'Clients/Show', props: { client: ClientSerializer.render_as_json(@client) }
   end
 
   # GET /clients/new
@@ -27,7 +27,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1/edit
   def edit
-    render inertia: 'Clients/Edit', props: { client: @client.as_json }
+    render inertia: 'Clients/Edit', props: { client: ClientSerializer.render_as_json(@client) }
   end
 
   # POST /clients or /clients.json
