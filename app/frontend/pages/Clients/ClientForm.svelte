@@ -53,7 +53,7 @@
                 <FormInput {form} field="address1" label_name="Address Line 1"/>
                 <FormInput {form} field="address2" label_name="Address Line 2"/>
 
-                <div class="row mb-4">
+                <div class="row">
                     <div class="col">
                         <FormInput {form} field="town" label_name="Town"/>
                     </div>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <slot name="form-elements"/>
+                <slot name="form-elements" {form} />
 
                 {#if !readonly}
                     {#if $form.errors.title}
