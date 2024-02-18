@@ -8,7 +8,7 @@ class Client < ApplicationRecord
   # There must be at least one mprice record setup for the client
   validates :name, :address1, :town, presence: true
   validates :email, presence: true, uniqueness: true
-  validates :postcode, format: { with: /\A[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}\z/i, message: "is badly formed postcode" }
+  validates :postcode, format: { with: /\A[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}\z/i, message: 'is badly formed postcode' }
 
   validates :prices, presence: true
   validate :prices_must_not_overlap
