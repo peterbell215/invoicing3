@@ -52,7 +52,7 @@ describe 'Client' do
     context 'when a new record is built with a nil value for hourly_charge' do
       subject(:test_client) { build(:client) }
 
-      it 'autofills the price.' do
+      it 'autofills the since date.' do
         expect(test_client.current_rate_since).to eq Time.zone.today
       end
     end

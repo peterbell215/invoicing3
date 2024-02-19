@@ -13,8 +13,6 @@
     </svelte:fragment>
 
     <fieldset slot="form-elements" let:form class="form-group border p-3">
-        {@debug client}
-
         <legend class="w-auto px-2">Pricing</legend>
         <div class="row">
             <div class="col">

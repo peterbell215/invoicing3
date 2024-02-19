@@ -4,6 +4,7 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: %i[show edit update destroy]
 
+  # @todo authorization should occur on every request.
   after_action :verify_authorized, except: %i[index show]
 
   # GET /clients or /clients.json
