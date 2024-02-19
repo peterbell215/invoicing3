@@ -13,16 +13,16 @@ describe 'Client' do
 
   describe 'validations' do
     %i[name email address1 town postcode].each do |field|
-      it "flags an empty #{field} " do
-        test_client = build :client, field => nil
+      it "flags an empty #{field}" do
+        test_client = build(:client, field => nil)
         expect(test_client).not_to be_valid
       end
     end
 
     example_group 'postcode' do
-      specify { expect(build :client, postcode: 'CB1 1TT').to be_valid }
-      specify { expect(build :client, postcode: 'cb1 1tt').to be_valid }
-      specify { expect(build :client, postcode: 'cb999 111').not_to be_valid }
+      specify { expect(build(:client, postcode: 'CB1 1TT')).to be_valid }
+      specify { expect(build(:client, postcode: 'cb1 1tt')).to be_valid }
+      specify { expect(build(:client, postcode: 'cb999 111')).not_to be_valid }
     end
   end
 
@@ -47,11 +47,13 @@ describe 'Client' do
   end
 
   describe '#current_rate_since' do
+    before { travel_to(Date.new(2024, 2, 1)) }
+
     context 'when a new record is built with a nil value for hourly_charge' do
       subject(:test_client) { build(:client) }
 
       it 'autofills the price.' do
-        expect(test_client.current_rate_since).to eq Date.today
+        expect(test_client.current_rate_since).to eq Time.zone.today
       end
     end
   end
@@ -80,7 +82,7 @@ describe 'Client' do
 
       it 'does not do an update to the current Price record' do
         test_client.current_rate = Money.new(7000)
-        expect(test_client.current_price.hourly_charge_rate_pence_changed?).to be_falsey
+        expect(test_client.current_price).not_to be_hourly_charge_rate_pence_changed
       end
     end
   end

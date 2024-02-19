@@ -42,6 +42,9 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
+  # Allow time travel
+  config.include ActiveSupport::Testing::TimeHelpers
+
   # Don't need transactional fixtures as using DatabaseCleaner instead.
   config.use_transactional_fixtures = false
 
