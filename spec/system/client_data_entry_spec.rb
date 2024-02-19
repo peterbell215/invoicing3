@@ -5,11 +5,12 @@ require 'webdrivers'
 require 'vite_rails'
 
 RSpec.describe 'Client Administration' do
-  let(:user) { FactoryBot::create :user }
-  let(:admin_user) { FactoryBot::create :admin_user }
+  let(:user) { create(:user) }
+  let(:admin_user) { create(:admin_user) }
 
-  let(:client) { FactoryBot.attributes_for :client }
-  let(:client_without_town) { FactoryBot.attributes_for :client, town: nil }
+  let(:client) { attributes_for(:client) }
+  let(:client_without_town) { attributes_for(:client, town: nil) }
+
   it 'shows the Client page with New Button' do
     sign_in user
     visit clients_path
@@ -18,7 +19,8 @@ RSpec.describe 'Client Administration' do
     expect(page).to have_button('New')
   end
 
-  scenario 'adding a new user', js: true do
+  # rubocop:disable RSpec/NoExpectationExample - check done in #check_new_client
+  scenario 'adding a new user', :js do
     sign_in admin_user
     visit new_client_path
 
@@ -28,8 +30,10 @@ RSpec.describe 'Client Administration' do
 
     check_new_client(client)
   end
+  # rubocop:enable RSpec/NoExpectationExample
 
-  scenario 'missing a required field', js: true do
+  # rubocop:disable RSpec/NoExpectationExample - check done in #check_error_flag
+  scenario 'missing a required field', :js do
     sign_in admin_user
     visit new_client_path
 
@@ -39,6 +43,7 @@ RSpec.describe 'Client Administration' do
 
     check_error_flagged
   end
+  # rubocop:enable RSpec/NoExpectationExample
 
   def fill_in_new_client(client)
     %w[name email address1 town postcode].each do |field|
