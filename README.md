@@ -61,4 +61,17 @@ experimentation:
   warning in the box.
 - the error feedback `<div>` needs to have the class `invalid-feedback`
 
-I have created my own component `FormInput.svelte` to provide error display.
+I have created my own component `FormInput.svelte` to provide error display.  The ClientForm.svelte component now has
+two slot elements: `navigation-elements` that is a place to put buttons at the top of the form, and `form-elements` that
+is used to place extra fields into the form when required.
+
+To make sure the correct info is passed from frontend to the backend, I make good use of Interia.js `transform()` callback
+ahead of sending the data.
+
+### Passing Structured data between frontend and backend
+This has been another difficult area.  We use currency in the app.  For the frontend, I found the Dinero package to
+give me all I needed.  For the backend, the `money-rails` gem does the job.  The issue is that although both apps
+take an almost identical approach to how they manage money (both use integer to represent the amount in pence/cents and
+a currency field with the ISO name in it), they call the fields different things.  I decided that the JSON passed
+between backend and frontend would adopt the naming of the frontend.  However, I found the rails #as_json method not
+flexible enough, so have moved to using the 'blueprinter' gem instead.
