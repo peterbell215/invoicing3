@@ -11,12 +11,12 @@ class ClientsController < ApplicationController
   def index
     clients = Client.all
 
-    render inertia: 'Clients/Index', props: { clients: clients.as_json }
+    render inertia: 'Clients/Index', props: { clients: ClientSerializer.render_as_json(clients, view: :full_details) }
   end
 
   # GET /clients/1 or /clients/1.json
   def show
-    render inertia: 'Clients/Show', props: { client: ClientSerializer.render_as_json(@client) }
+    render inertia: 'Clients/Show', props: { client: ClientSerializer.render_as_json(@client, view: :full_details) }
   end
 
   # GET /clients/new
@@ -28,7 +28,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1/edit
   def edit
-    render inertia: 'Clients/Edit', props: { client: ClientSerializer.render_as_json(@client) }
+    render inertia: 'Clients/Edit', props: { client: ClientSerializer.render_as_json(@client, view: :full_details) }
   end
 
   # POST /clients or /clients.json

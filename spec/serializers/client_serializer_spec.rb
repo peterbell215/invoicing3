@@ -7,7 +7,7 @@ describe ClientSerializer do
     subject(:client) { build :client }
 
     it 'creates valid JSON' do
-      json = ClientSerializer.render_as_hash(client, root: :client)
+      json = ClientSerializer.render_as_hash(client, root: :client, view: :full_details)
 
       # @todo change the date to a defined date
       expect(json).to match client: { id: nil,
