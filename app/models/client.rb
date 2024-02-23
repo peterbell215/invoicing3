@@ -12,11 +12,18 @@ class Client < ApplicationRecord
 
   validates :prices, presence: true
   validate :prices_must_not_overlap
+  validates :new_rate, presence: { message: 'cannot be blank if New Rate From is set' }, if: :new_rate_from
+  validates :new_rate_from, presence: { message: 'cannot be blank if New Rate is set' }, if: :new_rate
+
+  attribute :new_rate, :money, default: Money.new(6000)
+  attribute :new_rate_from, :date, default: Date.today
 
   # Add a default prices record if none exists.
   after_initialize do |client|
-    client.prices.build(from: Time.zone.today, hourly_charge_rate: 60) if client.prices.empty?
+    _build_active_price if client.prices.empty?
   end
+
+  before_save :create_new_rate
 
   def as_json(options = {})
     # just in case someone says as_json(nil) and bypasses
@@ -41,28 +48,27 @@ class Client < ApplicationRecord
   # current rate in the database to be up to yesterday, and creates a new prices record starting
   # today with an open ended charge period.
   # @return [Money]
-  def current_rate=(rate)
+  def create_new_rate
     active_price = self.current_price
 
     if active_price.nil?
       # No record exists yet, so create a new one.
-      _build_active_price(rate)
-    elsif active_price.hourly_charge_rate != rate
+      _build_active_price
+    elsif active_price.hourly_charge_rate != self.new_rate
       # Something has changed, so ...
       if active_price.persisted?
         # If this is a persisted (ie existing) price, then amend date period and add the new record.
-        active_price.update!(to: Time.zone.today - 1.day)
-        _build_active_price(rate)
+        active_price.update!(to: self.new_rate_from - 1.day)
+        _build_active_price
       else
         # If not yet persisted, then update existing unsaved record.
-        active_price.hourly_charge_rate = rate
+        active_price.hourly_charge_rate = self.new_rate
       end
     end
-    rate
   end
 
-  def _build_active_price(rate)
-    self.prices << Price.new(from: Time.zone.today, to: nil, hourly_charge_rate: rate)
+  def _build_active_price
+    self.prices << Price.new(from: self.new_rate_from, to: nil, hourly_charge_rate: self.new_rate)
   end
 
   # Returns the current price record.

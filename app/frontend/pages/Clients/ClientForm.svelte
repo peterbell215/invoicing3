@@ -15,8 +15,8 @@
         address2: client?.address2,
         town: client?.town,
         postcode: client?.postcode,
-        current_rate: Dinero(client?.current_rate).toFormat('$0,0.00'),
-        current_rate_since: format_date(client?.current_rate_since)
+        current_rate: Dinero( (client!==undefined) ? client.current_rate : {amount: 6000, currency: "GBP"} ).toFormat('$0,0.00'),
+        current_rate_since: (client!==undefined) ? format_date(client.current_rate_since) : 'Now',
     });
 
     function submit() {
@@ -27,7 +27,20 @@
                 }
             });
         } else {
-            $form.put(`/clients/${$form.id}`, {
+            console.log($form.new_rate);
+            console.log(parseInt($form.new_rate));
+            $form.transform((data) => {
+                delete data.client;
+                delete data.current_rate;
+                delete data.current_rate_since;
+                if (data.new_rate !== undefined) {
+                    data.new_rate = Dinero( { amount: parseInt($form.new_rate), currency: "GBP" } );
+                }
+                if (data.new_rate_from !== undefined) {
+                    data.new_rate_from = $form.new_rate_from;
+                }
+                return { client: data };
+            }).put(`/clients/${$form.id}`, {
                 onSuccess: () => {
                     $form.reset();
                 }

@@ -1,16 +1,21 @@
 <script>
     import { useForm } from '@inertiajs/svelte'
     import ClientForm from "~/pages/Clients/ClientForm.svelte";
+    import FormInput from "@/components/FormInput.svelte";
 
-    let form = useForm({
-        name: null,
-        email: null,
-        address1: null,
-        address2: null,
-        town: null,
-        postcode: null
-    })
-
+    export let client;
 </script>
 
-<ClientForm form="{form}" />
+<ClientForm client="{client}">
+    <fieldset slot="form-elements" let:form class="form-group border p-3">
+        <legend class="w-auto px-2">Pricing</legend>
+        <div class="row">
+            <div class="col">
+                <FormInput {form} field="current_rate" label_name="Current Hourly Charge" />
+            </div>
+            <div class="col">
+                <FormInput {form} field="current_rate_since" label_name="From" value="Now" disabled=true />
+            </div>
+        </div>
+    </fieldset>
+</ClientForm>
