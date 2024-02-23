@@ -5,7 +5,7 @@ class Client < ApplicationRecord
   has_many :meetings, dependent: :destroy
   has_many :prices, dependent: :destroy
 
-  # There must be at least one mprice record setup for the client
+  # There must be at least one price record setup for the client
   validates :name, :address1, :town, presence: true
   validates :email, presence: true, uniqueness: true
   validates :postcode, format: { with: /\A[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}\z/i, message: 'is badly formed postcode' }
@@ -15,8 +15,8 @@ class Client < ApplicationRecord
   validates :new_rate, presence: { message: 'cannot be blank if New Rate From is set' }, if: :new_rate_from
   validates :new_rate_from, presence: { message: 'cannot be blank if New Rate is set' }, if: :new_rate
 
-  attribute :new_rate, :money, default: Money.new(6000)
-  attribute :new_rate_from, :date, default: Date.today
+  attribute :new_rate, :money, default: -> { Money.new(6000) }
+  attribute :new_rate_from, :date, default: -> { Time.zone.today }
 
   # Add a default prices record if none exists.
   after_initialize do |client|
