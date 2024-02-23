@@ -12,7 +12,8 @@ class PricesController < ApplicationController
     prices = @client.prices.all
 
     render inertia: 'Prices/Index',
-           props: { client: @client.as_json(only: %i[id name]), prices: prices.map(&:json_with_dinero) }
+           props: { client: ClientSerializer.render_as_json(@client, view: short),
+                    prices: prices.map(&:json_with_dinero) }
   end
 
   private
