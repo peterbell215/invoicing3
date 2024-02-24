@@ -77,12 +77,15 @@ RSpec.describe 'Client Administration' do
   end
 
   def check_existing_client(client, **changed_fields)
-    saved_client = Client.find(client[:id])
+    message_div = page.find('div.alert.alert-dismissible.alert-info')
+    expect(message_div).to have_content('Client was successfully updated.')
 
-    saved_client.attributes.each do |field, value|
-      expect(value).to eq(changed_fields.key?(field) ? changed_fields[field] : client[field])
+    updated_client = Client.find(client[:id])
+
+    updated_client.attributes.except('created_at', 'updated_at').each do |field, value|
+      expect(value).to eq(changed_fields.key?(field.to_sym) ? changed_fields[field.to_sym] : client[field])
     end
+  end
 
-    expect(page.find('div.alert.alert-dismissible.alert-info')).to have_content('Client was successfully updated.')
   end
 end
