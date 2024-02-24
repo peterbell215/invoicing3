@@ -45,10 +45,15 @@ Metrics/BlockLength:
 # I like to use the description 'scenario' in feature specs.
 RSpec/Capybara:
    Exclude:
-    - spec/features/**/*_spec.rb
+    - spec/system/**/*_spec.rb
 
 # Feature specs are written in a style similar to Cucumber.  As such they have more lines than Rubocop likes.
 RSpec/ExampleLength:
+  Exclude:
+    - spec/system/**/*_spec.rb
+
+# Testing of expectations is often moved to a separate method to make the code cleaner.
+RSpec/NoExpectationExample:
   Exclude:
     - spec/system/**/*_spec.rb
 
