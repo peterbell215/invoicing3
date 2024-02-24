@@ -5,9 +5,5 @@
  * @return {string}
  */
 export function format_date(date_string) {
-    if (date_string!=null) {
-        return new Date(date_string).toLocaleDateString(undefined, { dateStyle: "medium" });
-    } else {
-        return "N/A";
-    }
+    return (date_string!=null) ? new Date(date_string).toLocaleDateString(undefined, { dateStyle: "medium" }) : "N/A";
 }
