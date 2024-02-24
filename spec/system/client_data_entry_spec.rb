@@ -59,6 +59,25 @@ RSpec.describe 'Client Administration' do
   end
   # rubocop:enable RSpec/NoExpectationExample
 
+  # rubocop:disable RSpec/NoExpectationExample - check done in #check_new_price_record_created
+  scenario 'change pricing for an existing client', :js do
+    client = Client.create(attributes_for(:client))
+
+    sign_in admin_user
+    visit edit_client_path(client.id)
+
+    new_rate_from = (Date.today + 2.days)
+    new_rate = client.current_rate + Money.new(1000)
+
+    fill_in('new_rate_from', with: new_rate_from.strftime('%d/%m/%Y'))
+    fill_in('new_rate', with: new_rate.amount)
+
+    click_on 'Submit'
+
+    check_new_price_record_created(client, new_rate, new_rate_from)
+  end
+  # rubocop:enable RSpec/NoExpectationExample
+
   def fill_in_new_client(client)
     %w[name email address1 town postcode].each do |field|
       fill_in(field, with: client[field.to_sym])
@@ -87,5 +106,14 @@ RSpec.describe 'Client Administration' do
     end
   end
 
+  def check_new_price_record_created(client, new_rate, new_rate_from)
+    message_div = page.find('div.alert.alert-dismissible.alert-info')
+    expect(message_div).to have_content('Client was successfully updated.')
+
+    updated_client = Client.find(client[:id])
+
+    expect(updated_client.prices.count).to eq(2)
+    expect(updated_client.current_rate).to eq(Money.new(7000, 'GBP'))
+    expect(updated_client.current_rate_since).to eq(Date.today + 2.days)
   end
 end

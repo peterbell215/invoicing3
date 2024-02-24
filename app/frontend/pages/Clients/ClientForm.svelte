@@ -37,7 +37,8 @@
                     data.new_rate = Dinero( { amount: parseInt($form.new_rate), currency: "GBP" } );
                 }
                 if ($form.new_rate_from !== undefined) {
-                    data.new_rate_from = $form.new_rate_from;
+                    // Note, that using $form.new_rate_from gets the old default value.
+                    data.new_rate_from = document.getElementById('new_rate_from').value // $form.new_rate_from.value;
                 }
                 return { client: data };
             }).put(`/clients/${$form.id}`, {
