@@ -33,10 +33,10 @@
                 delete data.client;
                 delete data.current_rate;
                 delete data.current_rate_since;
-                if (data.new_rate !== undefined) {
+                if ($form.new_rate !== undefined) {
                     data.new_rate = Dinero( { amount: parseInt($form.new_rate), currency: "GBP" } );
                 }
-                if (data.new_rate_from !== undefined) {
+                if ($form.new_rate_from !== undefined) {
                     data.new_rate_from = $form.new_rate_from;
                 }
                 return { client: data };
