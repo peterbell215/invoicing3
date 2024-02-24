@@ -50,4 +50,7 @@ RSpec/Capybara:
 # Feature specs are written in a style similar to Cucumber.  As such they have more lines than Rubocop likes.
 RSpec/ExampleLength:
   Exclude:
-    - spec/features/**/*_spec.rb
+    - spec/system/**/*_spec.rb
+
+RSpec/Capybara/FeatureMethods:
+  Enabled: false
