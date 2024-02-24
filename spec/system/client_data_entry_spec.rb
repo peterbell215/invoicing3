@@ -20,7 +20,7 @@ RSpec.describe 'Client Administration' do
   end
 
   # rubocop:disable RSpec/NoExpectationExample - check done in #check_new_client
-  scenario 'adding a new user', :js do
+  scenario 'adding a new client', :js do
     sign_in admin_user
     visit new_client_path
 
@@ -45,6 +45,18 @@ RSpec.describe 'Client Administration' do
   end
   # rubocop:enable RSpec/NoExpectationExample
 
+  scenario 'editing an existing client', :js do
+    client = create :client
+
+    sign_in admin_user
+    visit edit_client_path(client.id)
+
+    fill_in('address1', with: "#{client.address1} modified")
+    click_button 'Submit'
+
+    check_existing_client(client, address1: "#{client.address1} modified")
+  end
+
   def fill_in_new_client(client)
     %w[name email address1 town postcode].each do |field|
       fill_in(field, with: client[field.to_sym])
@@ -60,5 +72,15 @@ RSpec.describe 'Client Administration' do
 
   def check_error_flagged
     expect(page.find('div[data-testid="town"] > div.invalid-feedback')).to have_content("can't be blank")
+  end
+
+  def check_existing_client(client, **changed_fields)
+    saved_client = Client.find(client[:id])
+
+    saved_client.attributes.each do |field, value|
+      expect(value).to eq(changed_fields.has_key?(field) ? changed_fields[field] : client[field])
+    end
+
+    expect(page.find('div.alert.alert-dismissible.alert-info')).to have_content('Client was successfully updated.')
   end
 end
