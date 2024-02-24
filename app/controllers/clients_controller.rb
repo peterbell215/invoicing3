@@ -77,6 +77,10 @@ class ClientsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def client_params
-    params.require(:client).permit!
+    updated_params = params.require(:client).permit!
+    unless updated_params[:new_rate].blank?
+      updated_params[:new_rate] = Money.from_amount(updated_params[:new_rate][:amount], updated_params[:new_rate][:currency])
+    end
+    updated_params
   end
 end
