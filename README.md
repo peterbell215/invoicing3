@@ -68,6 +68,12 @@ is used to place extra fields into the form when required.
 To make sure the correct info is passed from frontend to the backend, I make good use of Interia.js `transform()` callback
 ahead of sending the data.
 
+### Date fields in Client form
+My Capybara test was failing for the #new_rate_from field.  Frustratingly, running in dev mode, it all seemed to work.
+After much experimentation, found that ```fill_in 'new_rate_from', with: '2028-02-26'``` was not actually leading to
+the correct element being updated in the ```$form``` object.  Not sure why, but now I use a DOM Javascript query
+to extract the info before sending on to the backend.
+
 ### Passing Structured data between frontend and backend
 This has been another difficult area.  We use currency in the app.  For the frontend, I found the Dinero package to
 give me all I needed.  For the backend, the `money-rails` gem does the job.  The issue is that although both apps
