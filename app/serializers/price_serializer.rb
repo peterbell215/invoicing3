@@ -3,5 +3,6 @@
 class PriceSerializer < Blueprinter::Base
   identifier :id
 
-  fields :client_id, :from, :to, :hourly_charge_rate
+  fields :client_id, :from, :to
+  association :hourly_charge_rate, blueprint: MoneySerializer
 end

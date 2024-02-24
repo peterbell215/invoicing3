@@ -26,7 +26,7 @@
                         <tr>
                             <td>{format_date(price.from)}</td>
                             <td>{format_date(price.to)}</td>
-                            <td>{Dinero(price.hourly_charge_rate_as_dinero).toFormat('$0,0')}</td>
+                            <td>{Dinero(price.hourly_charge_rate).toFormat('$0,0')}</td>
                         </tr>
                     {/each}
                 </tbody>
