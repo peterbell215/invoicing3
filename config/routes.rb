@@ -11,5 +11,7 @@ Rails.application.routes.draw do
     resources :prices
   end
 
+  resources :meetings
+
   root 'static#home'
 end

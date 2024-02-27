@@ -27,8 +27,6 @@
                 }
             });
         } else {
-            console.log($form.new_rate);
-            console.log(parseInt($form.new_rate));
             $form.transform((data) => {
                 delete data.client;
                 delete data.current_rate;

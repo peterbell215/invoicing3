@@ -15,7 +15,9 @@
 </script>
 
 <div class="form-outline mb-4" data-testid="{field}">
-    <label class="form-label" for="{field}">{label_name}</label>
+    {#if label_name!==undefined}
+        <label class="form-label" for="{field}">{label_name}</label>
+    {/if}
     <input use:typeAction use:nameAction id="{field}"
            class="form-control" class:is-invalid={$form.errors[field]!==undefined}
            bind:value={$form[field]}
