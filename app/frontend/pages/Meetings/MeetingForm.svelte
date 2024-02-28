@@ -13,13 +13,20 @@
         start_date: meeting?.start,
         start_time: meeting?.start_time,
         duration: meeting?.duration,
-        client_id: meeting?.client_id
-        // current_rate: Dinero( (meeting!==undefined) ? client.current_rate : {amount: 6000, currency: "GBP"} ).toFormat('$0,0.00'),
+        client_id: meeting?.client_id,
+        current_rate: calculate_current_rate()
     });
 
     function submit() {
         if ($form.id === undefined) {
-            $form.post('/meetings', {
+            $form.transform((data) => {
+                delete data.meeting;
+                data.current_rate = Dinero( { amount: parseInt($form.current_rate), currency: "GBP" } );
+                data.start = `${data.start_date}T${data.start_time} ${new Date().getTimezoneOffset()}`
+                delete data.start_date;
+                delete data.start_time;
+                return { meeting: data };
+            }).post('/meetings', {
                 onSuccess: () => {
                     $form.reset();
                 }
@@ -44,6 +51,17 @@
                 }
             });
  */
+        }
+    }
+
+    function calculate_current_rate() {
+        if ((meeting?.current_rate !== undefined)) {
+            return Dinero(meeting.current_rate).toUnit();
+        } else if (meeting?.client_id !== undefined) {
+            let current_rate = clients.find((client) => { (meeting.client_id===client.id) } );
+            return Dinero(current_rate).toUnit();
+        } else {
+            return 60.00
         }
     }
 
@@ -113,6 +131,12 @@
                         </div>
                     </div>
                 </fieldset>
+
+                <div class="row">
+                    <div class="col">
+                        <FormInput {form} field="current_rate" type="number" label_name="Meeting Rate"/>
+                    </div>
+                </div>
 
                 {#if !readonly}
                     {#if $form.errors.title}

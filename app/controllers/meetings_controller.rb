@@ -77,12 +77,10 @@ class MeetingsController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
-  def client_params
-    updated_params = params.require(:client).permit!
-    if updated_params[:new_rate].present?
-      updated_params[:new_rate] =
-        Money.from_amount(updated_params[:new_rate][:amount], updated_params[:new_rate][:currency])
-    end
+  def meeting_params
+    updated_params = params.require(:meeting).permit!
+    updated_params[:current_rate] =
+      Money.from_amount(updated_params[:current_rate][:amount], updated_params[:current_rate][:currency])
     updated_params
   end
 end

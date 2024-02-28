@@ -1,5 +1,5 @@
 class Meeting < ApplicationRecord
   belongs_to :client
 
-  monetize :hourly_charge_pence
+  monetize :current_rate_pence
 end
