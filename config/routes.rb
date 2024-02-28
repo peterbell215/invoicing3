@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   resources :clients do
-    resources :prices
+    resources :fees
   end
 
   resources :meetings

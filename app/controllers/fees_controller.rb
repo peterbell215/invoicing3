@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Controller to handle REST-ful requests for Prices
-class PricesController < ApplicationController
+# Controller to handle REST-ful requests for Fees
+class FeesController < ApplicationController
   before_action :set_client
 
   # @todo Add authorization
@@ -9,11 +9,11 @@ class PricesController < ApplicationController
 
   # GET /clients or /clients.json
   def index
-    prices = @client.prices.all
+    fees = @client.fees.all
 
-    render inertia: 'Prices/Index',
+    render inertia: 'Fees/Index',
            props: { client: ClientSerializer.render_as_json(@client),
-                    prices: PriceSerializer.render_as_json(prices) }
+                    fees: FeeSerializer.render_as_json(fees) }
   end
 
   private
@@ -24,6 +24,6 @@ class PricesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def client_params
-    params.require(:price).permit!
+    params.require(:fee).permit!
   end
 end

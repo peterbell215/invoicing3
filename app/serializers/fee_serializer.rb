@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PriceSerializer < Blueprinter::Base
+class FeeSerializer < Blueprinter::Base
   identifier :id
 
   fields :client_id, :from, :to
