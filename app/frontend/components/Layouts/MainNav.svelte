@@ -14,7 +14,7 @@
           <Link class="nav-link {$page.url === '/clients' ? 'nav-item active' : 'nav-item'}" href="/clients">Clients</Link>
         </li>
         <li class="nav-item">
-          <Link class="nav-link {$page.url === '/meetings' ? 'nav-item active' : 'nav-item'}" href="/meetings">Meetings</Link>
+          <Link class="nav-link {$page.url === '/client_sessions' ? 'nav-item active' : 'nav-item'}" href="/client_sessions">Client Sessions</Link>
         </li>
       </ul>
     </div>

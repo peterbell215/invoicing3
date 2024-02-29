@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Policy for access to meeting
-class MeetingPolicy < ApplicationPolicy
+# Policy for access to client_session
+class ClientSessionPolicy < ApplicationPolicy
   def create?
     user.admin?
   end

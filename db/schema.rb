@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_28_215510) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_29_054232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "client_sessions", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.datetime "start", null: false
+    t.integer "duration", null: false
+    t.integer "current_rate_pence", default: 0, null: false
+    t.string "current_rate_currency", default: "GBP", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_sessions_on_client_id"
+  end
 
   create_table "clients", force: :cascade do |t|
     t.string "name"
@@ -38,17 +49,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_28_215510) do
     t.index ["client_id"], name: "index_fees_on_client_id"
   end
 
-  create_table "meetings", force: :cascade do |t|
-    t.bigint "client_id", null: false
-    t.datetime "start", null: false
-    t.integer "duration", null: false
-    t.integer "current_rate_pence", default: 0, null: false
-    t.string "current_rate_currency", default: "GBP", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_meetings_on_client_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -62,6 +62,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_28_215510) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "client_sessions", "clients"
   add_foreign_key "fees", "clients"
-  add_foreign_key "meetings", "clients"
 end

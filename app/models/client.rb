@@ -2,7 +2,7 @@
 
 # Provides details of a client including address.
 class Client < ApplicationRecord
-  has_many :meetings, dependent: :destroy
+  has_many :client_sessions, dependent: :destroy
   has_many :fees, dependent: :destroy
 
   # There must be at least one fee record setup for the client
@@ -44,7 +44,7 @@ class Client < ApplicationRecord
     self.current_fee&.from
   end
 
-  # Sets the current fee for meetings if different from current fee as held in database.  Updates the
+  # Sets the current fee for client sessions if different from current fee as held in database.  Updates the
   # current rate in the database to be up to yesterday, and creates a new fees record starting
   # today with an open ended charge period.
   # @return [Money]

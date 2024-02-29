@@ -4,29 +4,29 @@
     import Dinero from "dinero.js";
     import {format_date} from "@/js/converters.js";
 
-    export let meeting;
+    export let client_session;
     export let clients;
     export let readonly = false;
 
     let form = useForm({
-        id: meeting?.id,
-        start_date: meeting?.start,
-        start_time: meeting?.start_time,
-        duration: meeting?.duration,
-        client_id: meeting?.client_id,
+        id: client_session?.id,
+        start_date: client_session?.start,
+        start_time: client_session?.start_time,
+        duration: client_session?.duration,
+        client_id: client_session?.client_id,
         current_rate: calculate_current_rate()
     });
 
     function submit() {
         if ($form.id === undefined) {
             $form.transform((data) => {
-                delete data.meeting;
+                delete data.client_session;
                 data.current_rate = Dinero( { amount: parseInt($form.current_rate), currency: "GBP" } );
                 data.start = `${data.start_date}T${data.start_time} ${new Date().getTimezoneOffset()}`
                 delete data.start_date;
                 delete data.start_time;
-                return { meeting: data };
-            }).post('/meetings', {
+                return { client_session: data };
+            }).post('/client_sessions', {
                 onSuccess: () => {
                     $form.reset();
                 }
@@ -55,10 +55,10 @@
     }
 
     function calculate_current_rate() {
-        if ((meeting?.current_rate !== undefined)) {
-            return Dinero(meeting.current_rate).toUnit();
-        } else if (meeting?.client_id !== undefined) {
-            let current_rate = clients.find((client) => { (meeting.client_id===client.id) } );
+        if ((client_session?.current_rate !== undefined)) {
+            return Dinero(client_session.current_rate).toUnit();
+        } else if (client_session?.client_id !== undefined) {
+            let current_rate = clients.find((client) => { (client_session.client_id===client.id) } );
             return Dinero(current_rate).toUnit();
         } else {
             return 60.00
@@ -82,10 +82,10 @@
 <div class="mx-auto col-4 py-4">
     <div class="card mb-4">
         <div class="card-header py-3">
-            <h5 class="mb-0">Meeting Details</h5>
+            <h5 class="mb-0">Client Session Details</h5>
         </div>
         <div class="card-body">
-            <Link href="/meetings/" class="btn btn-primary">Back</Link>
+            <Link href="/client_sessions/" class="btn btn-primary">Back</Link>
             <slot name="navigation-elements" />
 
             <form on:submit|preventDefault={submit} class='needs-validation' inert="{readonly}" novalidate >
@@ -134,7 +134,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <FormInput {form} field="current_rate" type="number" label_name="Meeting Rate"/>
+                        <FormInput {form} field="current_rate" type="number" label_name="Client session fee"/>
                     </div>
                 </div>
 

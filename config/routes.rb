@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     resources :fees
   end
 
-  resources :meetings
+  resources :client_sessions
 
   root 'static#home'
 end

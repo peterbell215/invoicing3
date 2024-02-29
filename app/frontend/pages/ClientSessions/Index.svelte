@@ -4,17 +4,17 @@
 
     let admin = $page.props.auth;
 
-    export let meetings;
+    export let client_sessions;
 </script>
 
 <div class="mx-auto col-6 py-6">
     <div class="card mb-6">
         <div class="card-header py-3">
-            <h1 class="mb-0">Meeting List</h1>
+            <h1 class="mb-0">Client Sessions List</h1>
         </div>
         <div class="card-body">
             {#if admin}
-                <button type="button" use:inertia="{{ href: '/meetings/new' }}" class="btn btn-primary">
+                <button type="button" use:inertia="{{ href: '/client_sessions/new' }}" class="btn btn-primary">
                     New
                 </button>
             {/if}
@@ -30,13 +30,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                {#each meetings as meeting}
+                {#each client_sessions as client_session}
                     <tr>
-                        <td><Link href="/meeting/{meeting.id}">{meeting.client.name}</Link>
-                        <td>{ new Date(Date.parse(meeting.start)).toLocaleString() }</td>
-                        <td>{ meeting.duration }</td>
-                        <td>{ Dinero(meeting.current_rate).toFormat('$0,0.00') }</td>
-                        <td><button class="btn btn-primary" use:inertia="{{ href: '/meeting/'+meeting.id, method: 'delete' }}" type="button">Delete</button></td>
+                        <td><Link href="/client_session/{client_session.id}">{client_session.client.name}</Link>
+                        <td>{ new Date(Date.parse(client_session.start)).toLocaleString() }</td>
+                        <td>{ client_session.duration }</td>
+                        <td>{ Dinero(client_session.current_rate).toFormat('$0,0.00') }</td>
+                        <td><button class="btn btn-primary" use:inertia="{{ href: '/client_session/'+client_session.id, method: 'delete' }}" type="button">Delete</button></td>
                     </tr>
                 {/each}
                 </tbody>
