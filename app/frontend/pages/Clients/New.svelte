@@ -1,5 +1,4 @@
 <script>
-    import { useForm } from '@inertiajs/svelte'
     import ClientForm from "~/pages/Clients/ClientForm.svelte";
     import FormInput from "@/components/FormInput.svelte";
 
