@@ -14,7 +14,7 @@
                 <FormInput {form} field="current_rate" label_name="Current Hourly Charge" />
             </div>
             <div class="col">
-                <FormInput {form} field="current_rate_since" label_name="From" value="Now" disabled=true />
+                <FormInput {form} field="current_rate_since" label_name="From" value="Now" readonly="true" />
             </div>
         </div>
     </fieldset>

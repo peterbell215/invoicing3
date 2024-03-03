@@ -13,7 +13,7 @@
             <legend class="w-auto px-2">Fees</legend>
             <div class="row">
                 <div class="col">
-                    <FormInput {form} field="current_rate" label_name="Current Hourly Fee" disabled=true />
+                    <FormInput {form} field="current_rate" label_name="Current Hourly Fee" readonly=true />
                 </div>
                 <div class="col"></div>
             </div>

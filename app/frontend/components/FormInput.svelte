@@ -2,8 +2,8 @@
     export let form;
     export let type = "text";
     export let field;
-    export let label_name;
-    export let disabled = false;
+    export let label_name = undefined;
+    export let readonly = false;
 
     function typeAction(node) {
         node.type = type;
