@@ -81,3 +81,18 @@ take an almost identical approach to how they manage money (both use integer to 
 a currency field with the ISO name in it), they call the fields different things.  I decided that the JSON passed
 between backend and frontend would adopt the naming of the frontend.  However, I found the rails #as_json method not
 flexible enough, so have moved to using the 'blueprinter' gem instead.
+
+### SCSS/SASS Usage
+I decided I wanted to use SCSS/SASS in the application.  The primary driver was that I wanted to apply the same margins to
+all form labels on a specific page.  This is not possible with standard CSS, but is relatively easy using the ```@extend```
+operator in SCSS/SASS.
+
+However, it turned into a bit of a nightmare.  To be fare to both Svelte and Vite, they do provide easy mechanisms for getting
+SCSS integrated, just the documentation (and particularly Stackoverflow answers) are both outofdate.  So here are my key
+finds:
+
+- We need a ```svelte.config.js``` file to instruct Svelte to use the Vite preprocessor.  This naturally adds the tools needed
+  for SCSS/SASS preprocessing.
+- We need to make the following changes to the vite.config.js:
+
+
