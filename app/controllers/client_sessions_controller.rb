@@ -16,7 +16,9 @@ class ClientSessionsController < ApplicationController
 
   # GET /clients/1 or /clients/1.json
   def show
-    render inertia: 'ClientSessions/Show', props: { client_session: ClientSessionSerializer.render_as_json(@client_session) }
+    render inertia: 'ClientSessions/Show',
+           props: { client_session: ClientSessionSerializer.render_as_json(@client_session),
+                    client: ClientSerializer.render_as_json(@client_session.client, view: :short_details) }
   end
 
   # GET /clients/new
@@ -40,7 +42,7 @@ class ClientSessionsController < ApplicationController
     authorize client_session
 
     if client_session.save
-      redirect_to client_session_path, notice: 'Client session created.'
+      redirect_to client_session_path(client_session), notice: 'Client session created.'
     else
       redirect_to new_client_session_path, inertia: { errors: client_session.errors }
     end

@@ -71,10 +71,10 @@
 
                 <div class="row">
                     <div class="col">
-                        <FormInput {form} field="town" label_name="Town"/>
+                        <FormInput {form} field="town" label_name="Town" {readonly}/>
                     </div>
                     <div class="col">
-                        <FormInput {form} field="postcode" label_name="Postcode" on:blur={onBlur}/>
+                        <FormInput {form} field="postcode" label_name="Postcode" {readonly} on:blur={onBlur}/>
                     </div>
                 </div>
 

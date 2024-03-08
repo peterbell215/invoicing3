@@ -79,24 +79,36 @@
     }
 </script>
 
+<style lang="scss">
+
+</style>
+
 <div class="mx-auto col-4 py-4">
     <div class="card mb-4">
         <div class="card-header py-3">
-            <h5 class="mb-0">Client Session Details</h5>
+            <h3 class="mb-0">Client Session Details</h3>
         </div>
         <div class="card-body">
             <Link href="/client_sessions/" class="btn btn-primary">Back</Link>
             <slot name="navigation-elements" />
 
             <form on:submit|preventDefault={submit} class='needs-validation' inert="{readonly}" novalidate >
-                <label for="client_id">Client</label>
-                <select name="client_id" class="form-select" bind:value={$form['client_id']}>
-                    {#each clients as client}
-                        <option value={client.id}>
-                            {client.name}
-                        </option>
-                    {/each}
-                </select>
+                {#if clients!==undefined}
+                    <label for="client_id">Client</label>
+                    <select name="client_id" class="form-select" bind:value={$form['client_id']}>
+                        {#each clients as client}
+                            <option value={client.id}>
+                                {client.name}
+                            </option>
+                        {/each}
+                    </select>
+                {:else}
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="client_name">Client</label>
+                        <input id="client_name" class="form-control" value={client.name} disabled="true"/>
+                        <input type="hidden" name="client_id" bind:value={$form['client_id']} {readonly} />
+                    </div>
+                {/if}
 
                 <fieldset class="form-group border p-3">
                     <legend class="w-auto px-2">Date & Time</legend>

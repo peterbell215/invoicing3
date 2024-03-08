@@ -5,12 +5,17 @@
     let admin = $page.props.auth;
 
     export let client_sessions;
+    export let client;
 </script>
 
 <div class="mx-auto col-6 py-6">
     <div class="card mb-6">
         <div class="card-header py-3">
-            <h1 class="mb-0">Client Sessions List</h1>
+            {#if client!==undefined}
+                <h1 class="mb-0">Client Sessions List for {client.name}</h1>
+            {:else}
+                <h1 class="mb-0">Client Sessions List</h1>
+            {/if}
         </div>
         <div class="card-body">
             {#if admin}
