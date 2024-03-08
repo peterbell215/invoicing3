@@ -88,11 +88,59 @@ all form labels on a specific page.  This is not possible with standard CSS, but
 operator in SCSS/SASS.
 
 However, it turned into a bit of a nightmare.  To be fare to both Svelte and Vite, they do provide easy mechanisms for getting
-SCSS integrated, just the documentation (and particularly Stackoverflow answers) are both outofdate.  So here are my key
-finds:
+SCSS integrated, just the documentation (and particularly Stackoverflow answers) are both out-of-date.  I would see one
+of three outcomes:
+- under certain configurations the system would flag the ```@extend``` keyword would be flagged, telling me I needed
+  to configue the SCCS pre-processor,
+- under other configurations the pre-processor would see the ```@extend``` but did not recognise the ```py-3``` css
+  class,
+- under yet another configuration the preprocessor would run, the ```py-3``` css class, but when the page was rendered
+  in the browser, no bootstrap styling had been applied.
+
+My conclusions are that you almost need to treat the pre-complitation stage as a completely separate process to the
+serving the pages to the browser for rendering.
+
+So here is how I got it working:
 
 - We need a ```svelte.config.js``` file to instruct Svelte to use the Vite preprocessor.  This naturally adds the tools needed
   for SCSS/SASS preprocessing.
-- We need to make the following changes to the vite.config.js:
+```ruby
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
+const config = {
+  preprocess: [vitePreprocess({})],
+};
 
+export default config;
+```
+- We need to make the following changes to the vite.config.js to provide options to the preprocessing engine so that
+  the precessor knows about Bootstrap and can therefore ```@extend``` the css style.
+```ruby
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import 'bootstrap/scss/bootstrap'; `,
+      },
+    },
+  },
+```
+- Finally, in order to ensure that Bootstrap is served to the broswer, we need the ```application.html.erb``` to include 
+  the ```main.css``` ahead of serving the Svelte app itself:
+```html
+    <%= vite_client_tag %>
+    <%= vite_stylesheet_tag 'main.scss' %>
+    <%= vite_javascript_tag 'application' %>
+```
+
+We are now able to do the following in the main css file:
+```css
+@import "bootstrap/scss/bootstrap.scss";
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+label {
+  @extend .py-2;
+}
+```
+
+What I was not able to get working was to apply the ```@extend``` at the individual page.  I suspect, if I included
+the relevant Bootstrap style this would overcome the issue. 
