@@ -1,6 +1,6 @@
 <script>
     import {Link, useForm} from '@inertiajs/svelte'
-    import FormInput from "~/components/FormInput.svelte";
+    import CurrencyFormInput from "@/components/CurrencyFormInput.svelte";
     import Dinero from "dinero.js";
     import {format_date} from "@/js/converters.js";
 
@@ -56,12 +56,12 @@
 
     function calculate_current_rate() {
         if ((client_session?.current_rate !== undefined)) {
-            return Dinero(client_session.current_rate).toUnit();
+            return Dinero(client_session.current_rate);
         } else if (client_session?.client_id !== undefined) {
-            let current_rate = clients.find((client) => { (client_session.client_id===client.id) } );
-            return Dinero(current_rate).toUnit();
+            let current_rate = clients.find((client) => { (client_session.client_id===client.id) } ).current_rate;
+            return Dinero(current_rate);
         } else {
-            return 60.00
+            return Dinero({amount: 50.00});
         }
     }
 
@@ -145,8 +145,8 @@
                 </fieldset>
 
                 <div class="row">
-                    <div class="col">
-                        <FormInput {form} field="current_rate" type="number" label_name="Client session fee"/>
+                    <div class="col col-3">
+                        <CurrencyFormInput {form} field="current_rate" label_name="Client session fee" {readonly}/>
                     </div>
                 </div>
 
