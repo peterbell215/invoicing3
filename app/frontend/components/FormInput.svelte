@@ -18,10 +18,11 @@
     {#if label_name!==undefined}
         <label class="form-label" for="{field}">{label_name}</label>
     {/if}
+
     <input use:typeAction use:nameAction id="{field}"
            class="form-control" class:is-invalid={$form.errors[field]!==undefined}
            bind:value={$form[field]}
-           disabled = {disabled} />
+           disabled = {readonly} />
     {#if $form.errors[field]!==undefined}
         <div class="invalid-feedback">{$form.errors[field]}</div>
     {/if}

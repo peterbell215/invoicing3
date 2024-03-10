@@ -64,10 +64,10 @@
             <slot name="navigation-elements" />
 
             <form on:submit|preventDefault={submit} class='needs-validation' inert="{readonly}" novalidate >
-                <FormInput {form} field="name" label_name="Name"/>
-                <FormInput {form} field="email" type="email" label_name="Email"/>
-                <FormInput {form} field="address1" label_name="Address Line 1"/>
-                <FormInput {form} field="address2" label_name="Address Line 2"/>
+                <FormInput {form} field="name" label_name="Name" {readonly}/>
+                <FormInput {form} field="email" type="email" label_name="Email" {readonly}/>
+                <FormInput {form} field="address1" label_name="Address Line 1" {readonly}/>
+                <FormInput {form} field="address2" label_name="Address Line 2" {readonly}/>
 
                 <div class="row">
                     <div class="col">
