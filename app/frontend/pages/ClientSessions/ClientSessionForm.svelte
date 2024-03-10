@@ -2,16 +2,17 @@
     import {Link, useForm} from '@inertiajs/svelte'
     import CurrencyFormInput from "@/components/CurrencyFormInput.svelte";
     import Dinero from "dinero.js";
-    import {format_date} from "@/js/converters.js";
+    import DateTimeInput from "@/components/DateTimeInput.svelte";
+    import FormInput from "@/components/FormInput.svelte";
 
     export let client_session;
-    export let clients;
+    export let client = undefined;
+    export let clients = undefined;
     export let readonly = false;
 
     let form = useForm({
         id: client_session?.id,
-        start_date: client_session?.start,
-        start_time: client_session?.start_time,
+        start: new Date(client_session?.start),
         duration: client_session?.duration,
         client_id: client_session?.client_id,
         current_rate: calculate_current_rate()
@@ -21,7 +22,7 @@
         if ($form.id === undefined) {
             $form.transform((data) => {
                 delete data.client_session;
-                data.current_rate = Dinero( { amount: parseInt($form.current_rate), currency: "GBP" } );
+                // data.current_rate = Dinero( { amount: parseInt($form.current_rate), currency: "GBP" } );
                 data.start = `${data.start_date}T${data.start_time} ${new Date().getTimezoneOffset()}`
                 delete data.start_date;
                 delete data.start_time;
@@ -65,23 +66,8 @@
         }
     }
 
-    function start_times() {
-        let times = Array((21-6)*4).fill(0)
-        let h, m, i;
-
-        for(h=6, i=0; h<=21; h++) {
-            for(m=0; m<60; m+=15, i++) {
-                times[i] = `${h.toString().padStart(2, 0)}:${m.toString().padStart(2, 0)}`
-            }
-        }
-
-        return times;
-    }
+    console.log($form['start']);
 </script>
-
-<style lang="scss">
-
-</style>
 
 <div class="mx-auto col-4 py-4">
     <div class="card mb-4">
@@ -105,7 +91,7 @@
                 {:else}
                     <div class="form-outline mb-4">
                         <label class="form-label" for="client_name">Client</label>
-                        <input id="client_name" class="form-control" value={client.name} disabled="true"/>
+                        <input id="client_name" class="form-control" value={client.name} disabled="{readonly}"/>
                         <input type="hidden" name="client_id" bind:value={$form['client_id']} {readonly} />
                     </div>
                 {/if}
@@ -113,33 +99,9 @@
                 <fieldset class="form-group border p-3">
                     <legend class="w-auto px-2">Date & Time</legend>
                     <div class="row">
+                        <DateTimeInput {form} field="start" time_label_name="Start Time" date_label_name="Start Date" {readonly}/>
                         <div class="col">
-                            <label for="client_id">Client</label>
-                        </div>
-                        <div class="col">
-                            <label for="client_id">Start Time</label>
-                        </div>
-                        <div class="col">
-                            <label for="duration">Duration</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <FormInput {form} field="start_date" type="date"/>
-                        </div>
-                        <div class="col">
-                            <select id="start_time" name="start_time" class="form-select" bind:value={$form['start_time']}>
-                                {#each start_times() as start_time}
-                                    <option value={start_time}>{start_time}</option>
-                                {/each}
-                            </select>
-                        </div>
-                        <div class="col">
-                            <input type="number" id="duration"
-                                   class="form-control"
-                                   min="0" max="120" step="15" default="60"
-                                   bind:value={$form['duration']}
-                                   disabled = {readonly} />
+                            <FormInput {form} field="duration" type="number" label_name="Duration" {readonly}/>
                         </div>
                     </div>
                 </fieldset>
@@ -163,4 +125,3 @@
         </div>
     </div>
 </div>
-
