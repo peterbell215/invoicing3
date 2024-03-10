@@ -10,8 +10,9 @@ export function format_date(date_string) {
 
 export function format_date_for_input_field(date) {
     const year = date.getFullYear().toFixed().padStart(4, "0");
-    const month = date.getMonth().toFixed().padStart(2, "0");
-    const day = date.getDay().toFixed().padStart(2, "0");
+    const _month = date.getMonth() + 1;
+    const month = _month.toFixed().padStart(2, "0");
+    const day = date.getDate().toFixed().padStart(2, "0");
 
     return `${year}-${month}-${day}`;
 }
