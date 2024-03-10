@@ -8,6 +8,7 @@
     export let client_session;
     export let client = undefined;
     export let clients = undefined;
+    export let default_current_rate = undefined;
     export let readonly = false;
 
     let form = useForm({
@@ -22,10 +23,6 @@
         if ($form.id === undefined) {
             $form.transform((data) => {
                 delete data.client_session;
-                // data.current_rate = Dinero( { amount: parseInt($form.current_rate), currency: "GBP" } );
-                data.start = `${data.start_date}T${data.start_time} ${new Date().getTimezoneOffset()}`
-                delete data.start_date;
-                delete data.start_time;
                 return { client_session: data };
             }).post('/client_sessions', {
                 onSuccess: () => {
@@ -62,7 +59,7 @@
             let current_rate = clients.find((client) => { (client_session.client_id===client.id) } ).current_rate;
             return Dinero(current_rate);
         } else {
-            return Dinero({amount: 50.00});
+            return Dinero(default_current_rate);
         }
     }
 

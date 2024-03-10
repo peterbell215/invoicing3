@@ -26,7 +26,9 @@ class ClientSessionsController < ApplicationController
     authorize ClientSession
 
     render inertia: 'ClientSessions/New',
-           props: { clients: ClientSerializer.render_as_json(Client.order(:name), view: :short_details) }
+           props: { clients: ClientSerializer.render_as_json(Client.order(:name), view: :short_details),
+                    default_current_rate: MoneySerializer.render_as_json(Money.from_amount(45))
+                  }
   end
 
   # GET /clients/1/edit
@@ -82,7 +84,7 @@ class ClientSessionsController < ApplicationController
   def client_session_params
     updated_params = params.require(:client_session).permit!
     updated_params[:current_rate] =
-      Money.from_amount(updated_params[:current_rate][:amount], updated_params[:current_rate][:currency])
+      Money.from_cents(updated_params[:current_rate][:amount], updated_params[:current_rate][:currency])
     updated_params
   end
 end

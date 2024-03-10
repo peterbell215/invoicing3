@@ -18,7 +18,7 @@
     let currency = $form[field].getCurrency();
 
     function updateForm() {
-        $form[field] = Dinero({ amount: amount, currency: currency});
+        $form[field] = Dinero({ amount: Number(amount * 100), currency: currency});
     }
     $: amount, updateForm();
 </script>
