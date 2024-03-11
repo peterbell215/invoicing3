@@ -15,9 +15,10 @@ RSpec.describe 'Client Administration' do
     expect(page.find('h5')).to have_content('Client Details')
 
     %w[name email address1 town postcode].each do |field|
-      expect(page).to have_field(field, with: client[field])
+      expect(page).to have_field(field, with: client[field], disabled: true)
     end
-    expect(page).to have_field('current_rate', with: '£60.00')
-    expect(page).to have_field('current_rate_since', with: Date.today.to_fs(:rfc822))
+
+    expect(page).to have_field('current_rate', with: '£60.00', disabled: true)
+    expect(page).to have_field('current_rate_since', with: Date.today.to_fs(:rfc822), disabled: true)
   end
 end
