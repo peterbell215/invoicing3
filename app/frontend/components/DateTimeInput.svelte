@@ -13,7 +13,7 @@
     }
 
     let date_field = format_date_for_input_field($form[field]);
-    let time_field = $form[field].toLocaleTimeString();
+    let time_field = $form[field].toLocaleTimeString(undefined, { timeStyle: "short" });
     let date_field_name = `${field}-date`;
     let time_field_name = `${field}-time`;
 
@@ -44,8 +44,6 @@
             <label class="form-label" for="{date_field_name}">{date_label_name}</label>
         {/if}
 
-        {@debug date_field}
-
         <input id="{date_field_name}"
                class="form-control" class:is-invalid={$form.errors[field]!==undefined} type="date"
                bind:value={date_field} disabled = {readonly} />
@@ -62,7 +60,7 @@
         {/if}
 
         {#if !readonly}
-            <select id="{time_field_name}" name="{time_field_name}" class="form-select" bind:value={time_field}>
+            <select id="{time_field_name}" name="{time_field_name}" class="form-select" bind:value="{time_field}">
                 {#each times() as time}
                     <option value={time} selected={time===time_field}>{time}</option>
                 {/each}

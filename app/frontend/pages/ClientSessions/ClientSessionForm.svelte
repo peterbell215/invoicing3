@@ -6,7 +6,7 @@
     import FormInput from "@/components/FormInput.svelte";
 
     export let client_session;
-    export let client = undefined;
+    let client = client_session?.client;
     export let clients = undefined;
     export let default_current_rate = undefined;
     export let readonly = false;
@@ -30,25 +30,14 @@
                 }
             });
         } else {
-/*
             $form.transform((data) => {
-                delete data.client;
-                delete data.current_rate;
-                delete data.current_rate_since;
-                if ($form.new_rate !== undefined) {
-                    data.new_rate = Dinero( { amount: parseInt($form.new_rate), currency: "GBP" } );
-                }
-                if ($form.new_rate_from !== undefined) {
-                    // Note, that using $form.new_rate_from gets the old default value.
-                    data.new_rate_from = document.getElementById('new_rate_from').value // $form.new_rate_from.value;
-                }
-                return { client: data };
-            }).put(`/clients/${$form.id}`, {
+                delete data.client_session;
+                return { client_session: data };
+            }).put(`/client_sessions/${$form.id}`, {
                 onSuccess: () => {
                     $form.reset();
                 }
             });
- */
         }
     }
 
