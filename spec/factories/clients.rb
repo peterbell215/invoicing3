@@ -8,7 +8,7 @@ FactoryBot.define do
     town      { 'Cambridge' }
     postcode  { 'CB99 1TA' }
 
-    factory :client_with_fees do
+    trait :client_with_fees do
       transient do
         gap { 1.day }
       end

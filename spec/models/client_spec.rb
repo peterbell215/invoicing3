@@ -91,7 +91,7 @@ describe 'Client' do
 
   describe 'ensure no overlaps on Fee' do
     context 'when non-overlapping Fees exist' do
-      subject(:test_client) { build(:client_with_fees) }
+      subject(:test_client) { build(:client, :client_with_fees) }
 
       it 'passes validation' do
         expect(test_client).to be_valid
@@ -99,7 +99,7 @@ describe 'Client' do
     end
 
     context 'when overlapping Fees exist' do
-      subject(:test_client) { build(:client_with_fees, gap: -5.days) }
+      subject(:test_client) { build(:client, :client_with_fees, gap: -5.days) }
 
       it 'fails validation' do
         expect(test_client).not_to be_valid
