@@ -4,10 +4,27 @@ require 'rails_helper'
 
 describe 'Client' do
   describe 'FactoryBot' do
-    subject(:test_client) { build(:client) }
+    context 'when FactoryBot creates a client' do
+      subject(:test_client) { build(:client) }
 
-    it 'creates a sample item correctly' do
-      expect(test_client.name).to eq('Test Client')
+      specify { expect(test_client.name).to eq('Test Client') }
+    end
+
+    context 'when Factorybot creates a client with fees' do
+      subject(:test_client) { build(:client, :with_fees) }
+
+      specify { expect(test_client.fees.length).to eq 3 }
+      specify { expect(test_client.fees[0].from).to eq Date.new(2022, 12, 1) }
+      specify { expect(test_client.fees[0].to + 1.day).to eq test_client.fees[1].from }
+    end
+
+    context 'when FactoryBot builds a client with client sessions' do
+      subject(:test_client) { build(:client, :with_client_sessions) }
+
+      specify { expect(test_client.client_sessions.length).to eq 4 }
+      specify { expect(test_client.client_sessions[0].start).to eq DateTime.new(2024, 2, 1, 9, 0) }
+      specify { expect(test_client.client_sessions[0].duration).to eq 60 }
+      specify { expect(test_client.client_sessions[0].start + 1.week).to eq test_client.client_sessions[1].start }
     end
   end
 
@@ -91,7 +108,7 @@ describe 'Client' do
 
   describe 'ensure no overlaps on Fee' do
     context 'when non-overlapping Fees exist' do
-      subject(:test_client) { build(:client, :client_with_fees) }
+      subject(:test_client) { build(:client, :with_fees) }
 
       it 'passes validation' do
         expect(test_client).to be_valid
@@ -99,7 +116,7 @@ describe 'Client' do
     end
 
     context 'when overlapping Fees exist' do
-      subject(:test_client) { build(:client, :client_with_fees, gap: -5.days) }
+      subject(:test_client) { build(:client, :with_fees, gap: -5.days) }
 
       it 'fails validation' do
         expect(test_client).not_to be_valid

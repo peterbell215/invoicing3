@@ -14,7 +14,7 @@ describe FeeSerializer do
                                    client_id: client.id,
                                    from: Date.new(2022, 10, 1),
                                    to: nil,
-                                   hourly_charge_rate: {amount:0 , currency: "GBP" }
+                                   hourly_charge_rate: {amount:6000 , currency: "GBP" }
       }
     end
   end
