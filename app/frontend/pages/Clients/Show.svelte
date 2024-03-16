@@ -2,6 +2,7 @@
     import ClientForm from "~/pages/Clients/ClientForm.svelte";
     import {Link} from "@inertiajs/svelte";
     import FormInput from "@/components/FormInput.svelte";
+    import CurrencyFormInput from "@/components/CurrencyFormInput.svelte";
 
     export let client;
 </script>
@@ -17,7 +18,7 @@
         <legend class="w-auto px-2">Fees</legend>
         <div class="row">
             <div class="col">
-                <FormInput {form} field="current_rate" label_name="Current Hourly Charge" readonly="true"/>
+                <CurrencyFormInput {form} field="current_rate" label_name="Current Hourly Charge" readonly="true"/>
             </div>
             <div class="col">
                 <FormInput {form} field="current_rate_since" label_name="Since" readonly="true"/>

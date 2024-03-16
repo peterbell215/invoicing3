@@ -8,8 +8,23 @@ RSpec.describe 'Client Administration' do
   let(:user) { create(:user) }
   let(:admin_user) { create(:admin_user) }
 
+  let(:existing_client) { create(:client) }
   let(:client) { attributes_for(:client) }
   let(:client_without_town) { attributes_for(:client, town: nil) }
+
+  scenario 'show the Client page with the correct detail', :js do
+    sign_in admin_user
+    visit client_path(existing_client)
+
+    expect(page.find('h5')).to have_content('Client Details')
+
+    %w[name email address1 town postcode].each do |field|
+      expect(page).to have_field(field, with: existing_client[field], disabled: true)
+    end
+
+    expect(page).to have_field('current_rate', with: '60', disabled: true)
+    expect(page).to have_field('current_rate_since', with: Date.today.to_fs(:rfc822), disabled: true)
+  end
 
   it 'shows the Client page with New Button' do
     sign_in user

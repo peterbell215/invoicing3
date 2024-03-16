@@ -7,18 +7,16 @@
     export let label_name = undefined;
     export let readonly = false;
 
-    console.log($form[field].getCurrency());
-
     function nameAction(node) {
         node.name = field;
     }
 
     // Extract the actual value from the Dinero object.
-    let amount = $form[field].toUnit();
-    let currency = $form[field].getCurrency();
+    let amount = $form[field]?.toUnit();
+    let currency = $form[field]?.getCurrency() || 'GBP';
 
     function updateForm() {
-        $form[field] = Dinero({ amount: Number(amount * 100), currency: currency});
+        $form[field] = (amount !== undefined) ? Dinero({ amount: Number(amount * 100), currency: currency}) : undefined;
     }
     $: amount, updateForm();
 </script>
@@ -34,7 +32,7 @@
         {#if !readonly}
             <input use:nameAction id="{field}"
                    class="form-control" class:is-invalid={$form.errors[field]!==undefined}
-                   bind:value={amount} />
+                   type="number" bind:value={amount} />
         {:else}
             <input use:nameAction id="{field}" class="form-control" value="{amount}" disabled />
         {/if}

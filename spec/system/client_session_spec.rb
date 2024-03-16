@@ -18,7 +18,7 @@ RSpec.describe 'Client Session Administration' do
       expect(page).to have_field(field, with: client[field], disabled: true)
     end
 
-    expect(page).to have_field('current_rate', with: '£60.00', disabled: true)
+    expect(page).to have_field('current_rate', with: '60', disabled: true)
     expect(page).to have_field('current_rate_since', with: Date.today.to_fs(:rfc822), disabled: true)
   end
 end

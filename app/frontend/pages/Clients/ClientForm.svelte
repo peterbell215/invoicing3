@@ -15,8 +15,8 @@
         address2: client?.address2,
         town: client?.town,
         postcode: client?.postcode,
-        current_rate: Dinero( (client!==undefined) ? client.current_rate : {amount: 6000, currency: "GBP"} ).toFormat('$0,0.00'),
-        current_rate_since: (client!==undefined) ? format_date(client.current_rate_since) : 'Now',
+        current_rate: Dinero( (client!==undefined) ? client.current_rate : {amount: 6000, currency: "GBP"} ),
+        current_rate_since: (client!==undefined) ? format_date(client.current_rate_since) : 'Now'
     });
 
     function submit() {
@@ -29,15 +29,12 @@
         } else {
             $form.transform((data) => {
                 delete data.client;
+                // if we are doing editing, then we don't need the current_rate, but instead need to deal with
+                // a new_rate if entered.
                 delete data.current_rate;
                 delete data.current_rate_since;
-                if ($form.new_rate !== undefined) {
-                    data.new_rate = Dinero( { amount: parseInt($form.new_rate), currency: "GBP" } );
-                }
-                if ($form.new_rate_from !== undefined) {
-                    // Note, that using $form.new_rate_from gets the old default value.
-                    data.new_rate_from = document.getElementById('new_rate_from').value // $form.new_rate_from.value;
-                }
+                data['new_rate'] = $form['new_rate'];
+                data['new_rate_from'] = $form['new_rate_from'];
                 return { client: data };
             }).put(`/clients/${$form.id}`, {
                 onSuccess: () => {

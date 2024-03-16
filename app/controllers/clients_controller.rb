@@ -79,7 +79,7 @@ class ClientsController < ApplicationController
   def client_params
     updated_params = params.require(:client).permit!
     unless updated_params[:new_rate].blank?
-      updated_params[:new_rate] = Money.from_amount(updated_params[:new_rate][:amount], updated_params[:new_rate][:currency])
+      updated_params[:new_rate] = Money.new(updated_params[:new_rate][:amount], updated_params[:new_rate][:currency])
     end
     updated_params
   end
