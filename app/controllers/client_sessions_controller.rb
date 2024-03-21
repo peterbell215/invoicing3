@@ -11,29 +11,30 @@ class ClientSessionsController < ApplicationController
   def index
     client_sessions = ClientSession.all
 
-    render inertia: 'ClientSessions/Index', props: { client_sessions: ClientSessionSerializer.render_as_json(client_sessions) }
+    render inertia: 'ClientSessions/Index',
+           props: { client_sessions: ClientSessionSerializer.render_as_json(client_sessions) }
   end
 
-  # GET /clients/1 or /clients/1.json
+  # GET /client_sessions/1 or /client_sessions/1.json
   def show
     render inertia: 'ClientSessions/Show',
            props: { client_session: ClientSessionSerializer.render_as_json(@client_session),
                     client: ClientSerializer.render_as_json(@client_session.client, view: :short_details) }
   end
 
-  # GET /clients/new
+  # GET /client_sessions/new
   def new
     authorize ClientSession
 
     render inertia: 'ClientSessions/New',
            props: { clients: ClientSerializer.render_as_json(Client.order(:name), view: :short_details),
-                    default_current_rate: MoneySerializer.render_as_json(Money.from_amount(45))
-                  }
+                    default_current_rate: MoneySerializer.render_as_json(Money.from_amount(45)) }
   end
 
   # GET /clients/1/edit
   def edit
-    render inertia: 'ClientSessions/Edit', props: { client_session: ClientSessionSerializer.render_as_json(@client_session) }
+    render inertia: 'ClientSessions/Edit',
+           props: { client_session: ClientSessionSerializer.render_as_json(@client_session) }
   end
 
   # POST /clients or /clients.json

@@ -51,8 +51,6 @@
             return Dinero(default_current_rate);
         }
     }
-
-    console.log($form['start']);
 </script>
 
 <div class="mx-auto col-4 py-4">

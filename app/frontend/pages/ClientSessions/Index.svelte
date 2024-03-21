@@ -33,18 +33,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                {#each client_sessions as client_session}
-                    <tr>
-                        <td><Link href="/client_sessions/{client_session.id}">{client_session.client.name}</Link>
-                        <td>{ new Date(Date.parse(client_session.start)).toLocaleString() }</td>
-                        <td>{ client_session.duration }</td>
-                        <td>{ Dinero(client_session.current_rate).toFormat('$0,0.00') }</td>
-                        <td>
-                            <button class="btn btn-primary" use:inertia="{{ href: '/client_session/'+client_session.id, method: 'delete' }}" type="button">Delete</button>
-                            <Link href="{`/client_sessions/${client_session.id}/edit`}"  class="btn btn-primary">Edit</Link>
-                        </td>
-                    </tr>
-                {/each}
+                    {#each client_sessions as client_session}
+                        <tr>
+                            <td><Link href="/client_sessions/{client_session.id}">{client_session.client.name}</Link>
+                            <td>{ new Date(Date.parse(client_session.start)).toLocaleString() }</td>
+                            <td>{ client_session.duration }</td>
+                            <td>{ Dinero(client_session.current_rate).toFormat('$0,0.00') }</td>
+                            <td>
+                                <button class="btn btn-primary" use:inertia="{{ href: '/client_session/'+client_session.id, method: 'delete' }}" type="button">Delete</button>
+                                <Link href="{`/client_sessions/${client_session.id}/edit`}"  class="btn btn-primary">Edit</Link>
+                            </td>
+                        </tr>
+                    {/each}
                 </tbody>
             </table>
         </div>
