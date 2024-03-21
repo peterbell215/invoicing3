@@ -8,4 +8,8 @@ class ClientSessionSerializer < Blueprinter::Base
 
   association :client, blueprint: ClientSerializer
   association :current_rate, blueprint: MoneySerializer
+
+  view :short_details do
+    exclude :client
+  end
 end

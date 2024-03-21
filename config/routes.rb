@@ -13,5 +13,7 @@ Rails.application.routes.draw do
 
   resources :client_sessions
 
+  resources :invoices
+
   root 'static#home'
 end
