@@ -11,12 +11,9 @@ Once that is working, best to switch to using Pundit to perform authorization.  
 authenication calls to Devise.  Details in
 [Adding Authorization and Flash Messages to Inertia Rails app](https://way-too-mainstream.vercel.app/articles/add-authorization-flash-to-inertia-rails-app).
 
-
 In order to keep the Javascript side as easy as possible, we use npm in preferrence to yarn.
 
 We use Docker to run the database.  This allows us to have different databases for different branches.
-
-
 
 ## Gotchas Found
 
@@ -167,3 +164,122 @@ label {
 
 What I was not able to get working was to apply the ```@extend``` at the individual page.  I suspect, if I included
 the relevant Bootstrap style this would overcome the issue. 
+
+### Dynamic Content
+
+Here's the scenario: You have a page with a selector of the client on it, that modifies the content shown on the page.
+However, determining the content is an expensive operation such that you don't want to push content down for all
+clients but instead waint until the specific client has been selected.
+
+In classical Svelte (if such a thing exists), you would use a combination of Javascript functions in the ```<script>```
+section, combined with ```{@await}``` in the HTML.  This is where Inertia.js approach is much more like that of a classical
+Rails app.  So you define what parameters you will feed into the page in the script page.
+
+```sveltehtml
+<script>
+  export let clients = undefined;                       // provided by backend.  List of clients with id, name, etc. 
+  export let details_for_specific_client = undefined;   // to be provided on demand by the backend
+  
+  let client;                                           // set by the page
+</script>
+```
+And in the main HTML section:
+
+```sveltehtml
+    <select>
+      <select name="client" bind:value={client} on:change={change_client}>
+        {#each clients as client}
+          <option value={client}>
+            {client}
+          </option>
+        {/each}
+      </select>
+    </select>
+```
+
+The above code will allow the controller to provide a list of clients and details for a specific client.  However,
+they can be left undefined by the backend as well.  The above code will invoke the function ```change_client()```
+whenever the user selects a different client.
+
+It is in this function that the magic of Inertia comes to the fore:
+
+```sveltehtml
+    function change_client() {
+        router.get(window.location.href, { client: client }, { only: ["details_for_specific_client"] } );
+    }
+```
+
+This asks Inertia to go back to the server, and request the page, but only load the information that will go into
+the ```details_for_specific_client``` variable. Note, the second argument of ```router.get()``` allows us to pass in the
+parameter of the client. The rest is classical Svelte. We will have HTML to render on the page the
+details_for_specific_client data. Svelte and Inertia between them will work out what parts of the page need
+re-rendering.
+
+On the server side, we do something like:
+
+```ruby
+  def new
+    props = { clients: ClientSerializer.render_as_json(Client.order(:name), view: :short_details) }
+
+    client = params.fetch(:client, nil)  // allows for invocation without client set.
+    if client
+      details_for_specific_client = get_the_relevant_client_details(); 
+      props[:details_for_specific_client] = ClientDetailsSerializer.render_as_json(details_for_specific_client)
+    end
+
+    render inertia: 'Invoices/New', props: {client:, details_for_specific_client:}
+  end
+```
+
+### Selector for Child Relationships
+
+For the Invoice, I want to be able to show a table of Client Sessions that have not yet been invoiced and
+allow the user to choose which ones to apply to an invoice.  In implementing this, I learnt the power of a
+number of great Svelte features.
+
+First is ```bind:group=``` which provides a simple way to tie a group of HTML input elements to an array.
+It looks something like this:
+
+```sveltehtml
+   {#each client_sessions as client_session}
+        <tr>
+            <td>
+                <input type="checkbox" value="{client_session.id}" bind:group={client_session_ids} />
+            </td>
+            ... other elements
+        </tr>
+    {/each}
+```
+
+The other strong feature is the use of ```$:``` as a very simple way to make the Javascript reactive.  I
+use this to create a Select All checkbox.  The HTML looks like this:
+
+```sveltehtml
+    <input type="checkbox" id="select_all_client_sessions" bind:checked={all_checked}/>
+```
+
+With my Select All checkbox bound to the ```all_checked``` variable, a few lines of Javascript does the
+rest:
+
+```javascript
+$: all_checked, change_client_sessions();
+$: client_session_ids, reset_client_sessions();
+
+function change_client_sessions() {
+  client_session_ids = [];
+
+  if (all_checked) {
+    client_sessions.forEach( (client_session) => client_session_ids.push(client_session.id));
+  }
+
+  console.log(client_session_ids);
+}
+
+function reset_client_sessions() {
+  all_checked = (client_session_ids.length===client_sessions.length);
+}
+```
+
+Now, when I uncheck a Client Session the Select All is also unticked.  And, if I select all Client Sessions
+individually, the Select All will become ticked.
+

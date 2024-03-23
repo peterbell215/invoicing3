@@ -12,6 +12,8 @@
     export let readonly = false;
 
     export let client_sessions = [];
+    let client_session_ids = [];
+    let all_checked = false;
 
     let form = useForm({
         id: invoice?.id,
@@ -21,9 +23,25 @@
 
     function change_client() {
         router.get(window.location.href, { client_id: client_id }, { only: ["client_sessions"] } );
-        // axios.get('/client_sessions', { params: { client_id: $form["client_id"] } } )
-        //    .then(response => console.log(response));
     }
+
+    $: all_checked, change_client_sessions();
+    $: client_session_ids, reset_client_sessions();
+
+    function change_client_sessions() {
+        client_session_ids = [];
+
+        if (all_checked) {
+            client_sessions.forEach( (client_session) => client_session_ids.push(client_session.id));
+        }
+
+        console.log(client_session_ids);
+    }
+
+    function reset_client_sessions() {
+        all_checked = (client_session_ids.length===client_sessions.length);
+    }
+
     function submit() {
 /*        if ($form.id === undefined) {
             $form.transform((data) => {
@@ -79,7 +97,6 @@
                     {/each}
                 </select>
 
-
                 <div class="row">
                     <div class="col">
                         <FormInput {form} type="date" field="date" label_name="Invoice Date" />
@@ -87,17 +104,30 @@
                 </div>
 
                 <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="select_all_client_sessions" bind:checked={all_checked}/>
+                            Select All
+                        </th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Hourly Rate</th>
+                    </tr>
+
+                    </thead>
                     <tbody>
                         {#each client_sessions as client_session}
                             <tr>
+                                <td>
+                                    <input type="checkbox" value="{client_session.id}" bind:group={client_session_ids} />
+                                </td>
                                 <td>{new Date(Date.parse(client_session.start)).toLocaleString()}</td>
                                 <td>{client_session.duration}</td>
                                 <td>{Dinero(client_session.current_rate).toFormat('$0,0.00')}</td>
                             </tr>
                         {/each}
                     </tbody>
-
-
                 </table>
 
                 {#if !readonly}
