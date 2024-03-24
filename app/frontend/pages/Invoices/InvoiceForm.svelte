@@ -2,7 +2,6 @@
     import {router, Link, useForm} from '@inertiajs/svelte';
     import axios from 'axios';
 
-    import CurrencyFormInput from "@/components/CurrencyFormInput.svelte";
     import Dinero from "dinero.js";
     import FormInput from "@/components/FormInput.svelte";
 
@@ -10,8 +9,8 @@
     export let client_id;
     export let clients;
     export let readonly = false;
-
     export let client_sessions = [];
+
     let client_session_ids = [];
     let all_checked = false;
 
@@ -19,60 +18,46 @@
         id: invoice?.id,
         date: new Date(invoice?.date),
         client_id: client_id,
+        amount: Dinero(invoice?.amount)
     });
 
     function change_client() {
         router.get(window.location.href, { client_id: client_id }, { only: ["client_sessions"] } );
     }
 
-    $: all_checked, change_client_sessions();
-    $: client_session_ids, reset_client_sessions();
+    $: all_checked, select_all_or_none_client_sessions();
+    $: client_session_ids, update_client_sessions();
 
-    function change_client_sessions() {
+    function select_all_or_none_client_sessions() {
         client_session_ids = [];
 
         if (all_checked) {
             client_sessions.forEach( (client_session) => client_session_ids.push(client_session.id));
         }
-
-        console.log(client_session_ids);
     }
 
-    function reset_client_sessions() {
+    function update_client_sessions() {
         all_checked = (client_session_ids.length===client_sessions.length);
+
+        $form['amount'] =
+            client_sessions.reduce( (amount, client_session) => {
+                return (client_session_ids.includes(client_session.id)) ? amount.add(Dinero(client_session.current_rate)) : amount;
+            }, Dinero({amount: 0, currency: 'GBP'}));
     }
 
     function submit() {
-/*        if ($form.id === undefined) {
+       if ($form.id === undefined) {
             $form.transform((data) => {
-                delete data.client_session;
+                data['client_session_ids'] = client_session_ids;
                 return { client_session: data };
-            }).post('/client_sessions', {
+            }).post('/invoices', {
                 onSuccess: () => {
                     $form.reset();
                 }
             });
         } else {
-            $form.transform((data) => {
-                delete data.client_session;
-                return { client_session: data };
-            }).put(`/client_sessions/${$form.id}`, {
-                onSuccess: () => {
-                    $form.reset();
-                }
-            });
-        }*/
-    }
 
-    function calculate_amount() {
-/*        if ((client_session?.current_rate !== undefined)) {
-            return Dinero(client_session.current_rate);
-        } else if (client_session?.client_id !== undefined) {
-            let current_rate = clients.find((client) => { (client_session.client_id===client.id) } ).current_rate;
-            return Dinero(current_rate);
-        } else {
-            return Dinero(default_current_rate);
-        }*/
+        }
     }
 </script>
 
@@ -105,17 +90,17 @@
 
                 <table class="table table-striped">
                     <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" id="select_all_client_sessions" bind:checked={all_checked}/>
-                            Select All
-                        </th>
-                        <th>Date</th>
-                        <th>Duration</th>
-                        <th>Hourly Rate</th>
-                    </tr>
-
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="select_all_client_sessions" bind:checked={all_checked}/>
+                                Select All
+                            </th>
+                            <th>Date</th>
+                            <th>Duration</th>
+                            <th>Hourly Rate</th>
+                        </tr>
                     </thead>
+
                     <tbody>
                         {#each client_sessions as client_session}
                             <tr>
@@ -127,6 +112,10 @@
                                 <td>{Dinero(client_session.current_rate).toFormat('$0,0.00')}</td>
                             </tr>
                         {/each}
+                        <tr>
+                            <td colspan="3">Total Amount</td>
+                            <td>{$form['amount'].toFormat('$0,0.00')}</td>
+                         </tr>
                     </tbody>
                 </table>
 
