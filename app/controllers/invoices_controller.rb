@@ -43,13 +43,13 @@ class InvoicesController < ApplicationController
 
   # POST /clients or /clients.json
   def create
-    client_session = ClientSession.new(client_session_params)
-
     # we don't run set_clients for create, so we need to authorize the resource here
-    authorize client_session
+    authorize Invoice
 
-    if client_session.save
-      redirect_to client_session_path(client_session), notice: 'Invoice created.'
+    invoice = Invoice.create(invoices_params)
+
+    if invoice
+      redirect_to client_session_path(invoice), notice: 'Invoice created.'
     else
       redirect_to new_invoice_path, inertia: { errors: invoice.errors }
     end
@@ -87,6 +87,8 @@ class InvoicesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def invoices_params
-    params.require(:invoice).permit!
+    updated_params = params.require(:invoice).permit!
+    updated_params[:amount] = Money.from_cents(updated_params[:amount][:amount], updated_params[:amount][:currency])
+    updated_params
   end
 end

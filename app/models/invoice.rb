@@ -14,20 +14,20 @@ class Invoice < ApplicationRecord
   def self.create(attrs)
     client_session_ids = attrs.delete(:client_session_ids)
 
-    super(attrs)&.update_client_sessions(client_session_ids, false)
+    super(attrs)&.update_client_sessions(client_session_ids, existing_invoice: false)
   end
 
-  def update_client_sessions(client_session_ids, existing_invoice = true)
+  def update_client_sessions(client_session_ids, existing_invoice: true)
     if existing_invoice
       existing_client_session_ids = ClientSession.where(invoice_id: self.id).pick(:id)
       remove_from_invoice = existing_client_session_ids - client_session_ids
       add_to_invoice = client_session_ids - existing_client_session_ids
-      ClientSession.where(id: remove_from_invoice).update(invoice_id: nil)
+      ClientSession.where(id: remove_from_invoice).update_all(invoice_id: nil)
     else
       add_to_invoice = client_session_ids
     end
 
-    ClientSession.where(id: add_to_invoice).update(invoice_id: self.id) unless add_to_invoice.empty?
+    ClientSession.where(id: add_to_invoice).update_all(invoice_id: self.id) unless add_to_invoice.empty?
     self
   end
 end

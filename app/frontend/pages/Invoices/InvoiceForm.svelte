@@ -48,8 +48,9 @@
     function submit() {
        if ($form.id === undefined) {
             $form.transform((data) => {
+                data['client_id'] = client_id;
                 data['client_session_ids'] = client_session_ids;
-                return { client_session: data };
+                return { invoice: data };
             }).post('/invoices', {
                 onSuccess: () => {
                     $form.reset();
