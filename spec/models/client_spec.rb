@@ -4,13 +4,13 @@ require 'rails_helper'
 
 describe 'Client' do
   describe 'FactoryBot' do
-    context 'when FactoryBot creates a client' do
+    context 'when FactoryBot builds a client' do
       subject(:test_client) { build(:client) }
 
       specify { expect(test_client.name).to eq('Test Client') }
     end
 
-    context 'when Factorybot creates a client with fees' do
+    context 'when Factorybot builds a client with fees' do
       subject(:test_client) { build(:client, :with_fees) }
 
       specify { expect(test_client.fees.length).to eq 3 }
