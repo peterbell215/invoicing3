@@ -1,17 +1,16 @@
 <script>
     import {router, Link, useForm} from '@inertiajs/svelte';
-    import axios from 'axios';
-
     import Dinero from "dinero.js";
+
     import FormInput from "@/components/FormInput.svelte";
 
-    export let invoice;
-    export let client_id;
-    export let clients;
+    export let invoice = undefined;
+    export let client_id = invoice?.client.id;
+    export let clients = undefined;
     export let readonly = false;
-    export let client_sessions = [];
+    export let client_sessions = (invoice !== undefined) ? invoice.client_sessions : [];
 
-    let client_session_ids = [];
+    let client_session_ids = client_sessions?.map( (client_session) => client_session.id );
     let all_checked = false;
 
     let form = useForm({
@@ -37,6 +36,8 @@
     }
 
     function update_client_sessions() {
+        if (readonly) return;
+
         all_checked = (client_session_ids.length===client_sessions.length);
 
         $form['amount'] =
@@ -68,34 +69,40 @@
             <h3 class="mb-0">Invoice Details</h3>
         </div>
         <div class="card-body">
-            <Link href="/client_sessions/" class="btn btn-primary">Back</Link>
+            <Link href="/invoices/" class="btn btn-primary">Back</Link>
             <slot name="navigation-elements" />
 
             <form on:submit|preventDefault={submit} class='needs-validation' inert="{readonly}" novalidate >
-
-                <label for="client_id">Client</label>
-                <select name="client_id" class="form-select" bind:value={client_id} on:change={change_client}>
-                    <option disabled selected value> -- select an option -- </option>
-                    {#each clients as client}
-                        <option value={client.id}>
-                            {client.name}
-                        </option>
-                    {/each}
-                </select>
+                {#if clients !== undefined}
+                    <label for="client_id">Client</label>
+                    <select name="client_id" class="form-select" bind:value={client_id} on:change={change_client}>
+                        <option disabled selected value> -- select an option -- </option>
+                        {#each clients as client}
+                            <option value={client.id}>
+                                {client.name}
+                            </option>
+                        {/each}
+                    </select>
+                {:else}
+                    <label for="client_name">Client</label>
+                    <input class="form-control" type="text" value="{invoice.client.name}" id="client_name" readonly>
+                {/if}
 
                 <div class="row">
                     <div class="col">
-                        <FormInput {form} type="date" field="date" label_name="Invoice Date" />
+                        <FormInput {form} type="date" field="date" label_name="Invoice Date" {readonly}/>
                     </div>
                 </div>
 
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>
-                                <input type="checkbox" id="select_all_client_sessions" bind:checked={all_checked}/>
-                                Select All
-                            </th>
+                            {#if !readonly}
+                                <th>
+                                    <input type="checkbox" id="select_all_client_sessions" bind:checked={all_checked}/>
+                                    Select All
+                                </th>
+                            {/if}
                             <th>Date</th>
                             <th>Duration</th>
                             <th>Hourly Rate</th>
@@ -105,16 +112,18 @@
                     <tbody>
                         {#each client_sessions as client_session}
                             <tr>
-                                <td>
-                                    <input type="checkbox" value="{client_session.id}" bind:group={client_session_ids} />
-                                </td>
+                                {#if !readonly}
+                                    <td>
+                                        <input type="checkbox" value="{client_session.id}" bind:group={client_session_ids} />
+                                    </td>
+                                {/if}
                                 <td>{new Date(Date.parse(client_session.start)).toLocaleString()}</td>
                                 <td>{client_session.duration}</td>
                                 <td>{Dinero(client_session.current_rate).toFormat('$0,0.00')}</td>
                             </tr>
                         {/each}
                         <tr>
-                            <td colspan="3">Total Amount</td>
+                            <td colspan="{(!readonly) ? 3 : 2}">Total Amount</td>
                             <td>{$form['amount'].toFormat('$0,0.00')}</td>
                          </tr>
                     </tbody>

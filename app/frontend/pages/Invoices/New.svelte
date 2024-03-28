@@ -1,7 +1,6 @@
 <script>
     import InvoiceForm from "~/pages/Invoices/InvoiceForm.svelte";
 
-    export let invoice = undefined;
     export let client_id = undefined;
     export let clients = undefined;
     export let client_sessions = [];

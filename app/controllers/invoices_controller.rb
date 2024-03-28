@@ -2,7 +2,7 @@
 
 # Controller to handle REST-ful requests for Invoices
 class InvoicesController < ApplicationController
-  before_action :set_invoices, only: %i[show edit update destroy]
+  before_action :set_invoice, only: %i[show edit update destroy]
 
   # @todo authorization should occur on every request.
   after_action :verify_authorized, except: %i[index show]
@@ -17,8 +17,7 @@ class InvoicesController < ApplicationController
   # GET /clients/1 or /clients/1.json
   def show
     render inertia: 'Invoices/Show',
-           props: { client_session: ClientSessionSerializer.render_as_json(@client_session),
-                    client: ClientSerializer.render_as_json(@client_session.client, view: :short_details) }
+           props: { invoice: InvoiceSerializer.render_as_json(@invoice) }
   end
 
   # GET /clients/new
