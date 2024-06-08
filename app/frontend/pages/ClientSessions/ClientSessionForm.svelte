@@ -11,9 +11,11 @@
     export let default_current_rate = undefined;
     export let readonly = false;
 
+    console.log(new Date(null));
+
     let form = useForm({
         id: client_session?.id,
-        start: new Date(client_session?.start),
+        start: (client_session?.start !== undefined) ? client_session?.start : new Date(),
         duration: client_session?.duration,
         client_id: client_session?.client_id,
         current_rate: calculate_current_rate()

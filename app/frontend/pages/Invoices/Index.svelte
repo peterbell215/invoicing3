@@ -37,7 +37,7 @@
                         <tr>
                             <td><Link href="/invoices/{invoice.id}">{invoice.id}</Link></td>
                             <td><Link href="/clients/{invoice.client.id}">{invoice.client.name}</Link></td>
-                            <td>{ new Date(Date.parse(invoice.date)).toLocaleString([], {dateStyle: 'short'}) }</td>
+                            <td>{ new Date(Date.parse(invoice.date)).toLocaleString([], {dateStyle: 'medium'}) }</td>
                             <td>{ Dinero(invoice.amount).toFormat('$0,0.00') }</td>
                             <td>
                                 <button class="btn btn-primary" use:inertia="{{ href: '/invoices/'+invoice.id, method: 'delete' }}" type="button">Delete</button>

@@ -1,6 +1,7 @@
 <script>
     import { inertia, page, Link } from '@inertiajs/svelte'
     import Dinero from "dinero.js";
+    import {format_time} from "@/js/converters.js";
 
     let admin = $page.props.auth;
 
@@ -36,7 +37,7 @@
                     {#each client_sessions as client_session}
                         <tr>
                             <td><Link href="/client_sessions/{client_session.id}">{client_session.client.name}</Link>
-                            <td>{ new Date(Date.parse(client_session.start)).toLocaleString() }</td>
+                            <td>{ format_time(client_session.start) }</td>
                             <td>{ client_session.duration }</td>
                             <td>{ Dinero(client_session.current_rate).toFormat('$0,0.00') }</td>
                             <td>

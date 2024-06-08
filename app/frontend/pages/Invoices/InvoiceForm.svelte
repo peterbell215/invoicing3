@@ -3,6 +3,7 @@
     import Dinero from "dinero.js";
 
     import FormInput from "@/components/FormInput.svelte";
+    import { format_time } from "@/js/converters.js";
 
     export let invoice = undefined;
     export let client_id = invoice?.client.id;
@@ -38,7 +39,7 @@
     function update_client_sessions() {
         if (readonly) return;
 
-        all_checked = (client_session_ids.length===client_sessions.length);
+        all_checked = client_sessions.length === 0 ? false : (client_session_ids.length === client_sessions.length);
 
         $form['amount'] =
             client_sessions.reduce( (amount, client_session) => {
@@ -117,7 +118,7 @@
                                         <input type="checkbox" value="{client_session.id}" bind:group={client_session_ids} />
                                     </td>
                                 {/if}
-                                <td>{new Date(Date.parse(client_session.start)).toLocaleString()}</td>
+                                <td>{format_time(client_session.start)}</td>
                                 <td>{client_session.duration}</td>
                                 <td>{Dinero(client_session.current_rate).toFormat('$0,0.00')}</td>
                             </tr>

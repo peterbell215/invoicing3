@@ -33,6 +33,7 @@
            class="form-control" class:is-invalid={$form.errors[field]!==undefined}
            bind:value={value}
            disabled = {readonly} />
+
     {#if $form.errors[field]!==undefined}
         <div class="invalid-feedback">{$form.errors[field]}</div>
     {/if}

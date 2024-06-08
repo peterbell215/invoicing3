@@ -1,6 +1,7 @@
 <script>
     import FormInput from "@/components/FormInput.svelte";
     import {format_date_for_input_field} from "@/js/converters.js";
+    import { DateInput } from 'date-picker-svelte';
 
     export let form;
     export let field;
@@ -12,7 +13,7 @@
         node.name = field;
     }
 
-    let date_field = format_date_for_input_field($form[field]);
+    let date_field = $form[field];
     let time_field = $form[field].toLocaleTimeString(undefined, { timeStyle: "short" });
     let date_field_name = `${field}-date`;
     let time_field_name = `${field}-time`;
@@ -44,9 +45,8 @@
             <label class="form-label" for="{date_field_name}">{date_label_name}</label>
         {/if}
 
-        <input id="{date_field_name}"
-               class="form-control" class:is-invalid={$form.errors[field]!==undefined} type="date"
-               bind:value={date_field} disabled = {readonly} />
+        <DateInput bind:value={date_field} format="dd-MMM-yyyy"/>
+
         {#if $form.errors[field]!==undefined}
             <div class="invalid-feedback">{$form.errors[field]}</div>
         {/if}
