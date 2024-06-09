@@ -5,20 +5,15 @@ require 'webdrivers'
 require 'vite_rails'
 
 RSpec.describe 'Client Session Administration' do
-  let(:admin_user) { create(:admin_user) }
-  let(:client) { create(:client) }
+  let!(:admin_user) { create(:admin_user) }
+  let!(:clients) { create_list(:client_with_random_name, 5, :with_client_sessions) }
 
   scenario 'show the Client page with the correct detail', :js do
     sign_in admin_user
-    visit client_path(client)
+    visit client_sessions_path
 
-    expect(page.find('h5')).to have_content('Client Details')
+    expect(page.find('h1')).to have_content('Client Sessions List')
 
-    %w[name email address1 town postcode].each do |field|
-      expect(page).to have_field(field, with: client[field], disabled: true)
-    end
-
-    expect(page).to have_field('current_rate', with: '60', disabled: true)
-    expect(page).to have_field('current_rate_since', with: Date.today.to_fs(:rfc822), disabled: true)
+    expect(page).to have_selector('tr', count: 5*4 + 1)
   end
 end

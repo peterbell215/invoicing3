@@ -54,6 +54,7 @@ gem 'blueprinter'
 group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
+  gem 'faker'
   gem 'foreman'
   gem 'rspec-rails', ">= 3.9.0"
   gem 'rubocop'
@@ -67,8 +68,6 @@ group :development do
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
-
-  gem 'faker'
 end
 
 group :test do

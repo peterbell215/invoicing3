@@ -8,6 +8,11 @@ FactoryBot.define do
     town      { 'Cambridge' }
     postcode  { 'CB99 1TA' }
 
+    factory :client_with_random_name do
+      name    { Faker::Name.name }
+      email   { Faker::Internet.email(name: name) }
+    end
+
     trait :with_fees do
       transient do
         gap { 1.day }
