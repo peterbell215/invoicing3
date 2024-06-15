@@ -1,5 +1,5 @@
 <script>
-    import { inertia, page, Link } from '@inertiajs/svelte'
+    import { page, Link, router } from '@inertiajs/svelte';
     import Dinero from "dinero.js";
     import {format_time} from "@/js/converters.js";
 
@@ -7,6 +7,12 @@
 
     export let client_sessions;
     export let client;
+
+    function confirmDelete(client_session) {
+        if (window.confirm('Confirm Delete?')) {
+            router.delete('/client_sessions/'+client_session.client_session.id);
+        }
+    }
 </script>
 
 <div class="mx-auto col-6 py-6">
@@ -41,8 +47,8 @@
                             <td>{ client_session.duration }</td>
                             <td>{ Dinero(client_session.current_rate).toFormat('$0,0.00') }</td>
                             <td>
-                                <button class="btn btn-primary" use:inertia="{{ href: '/client_session/'+client_session.id, method: 'delete' }}" type="button">Delete</button>
                                 <Link href="{`/client_sessions/${client_session.id}/edit`}"  class="btn btn-primary">Edit</Link>
+                                <button class="btn btn-primary" type="button" on:click={() => confirmDelete({client_session})}>Delete</button>
                             </td>
                         </tr>
                     {/each}
