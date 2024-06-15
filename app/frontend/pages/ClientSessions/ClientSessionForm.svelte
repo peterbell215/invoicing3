@@ -11,8 +11,6 @@
     export let default_current_rate = undefined;
     export let readonly = false;
 
-    console.log(new Date(null));
-
     let form = useForm({
         id: client_session?.id,
         start: (client_session?.start !== undefined) ? client_session?.start : new Date(),
