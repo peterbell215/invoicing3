@@ -283,3 +283,28 @@ function reset_client_sessions() {
 Now, when I uncheck a Client Session the Select All is also unticked.  And, if I select all Client Sessions
 individually, the Select All will become ticked.
 
+## Confirm Window for deletes
+
+Its very standard to use a Browser Alert window to ask to confirm deleting a record, before you actually delete it.
+Unfortunately, there were no ready examples of Svelte/Inertia to show to do this, so I pieced this together from
+various bits of info.
+
+Although, the normal recommendation is to use the Inertia Link component, I found I had to go back to use a standard
+HTML `button` element:
+
+```sveltehtml
+  <button class="btn btn-primary" type="button" on:click={() => confirmDelete({client_session})}>Delete</button>
+```
+
+This will invoke ```confirmDelete()``` when the button is clicked.  The code for the event handler is:
+
+```javascript
+function confirmDelete(client_session) {
+  if (window.confirm('Confirm Delete?')) {
+    router.delete('/client_sessions/'+client_session.client_session.id);
+  }
+}
+```
+
+```router``` is an Inertia variable that provides direct access to the Inertia protocol.  Note the need to use
+```clientsession.clientsession``` to access the object.  Not sure, why, but clearly something to do with Svelte/Inertia.
