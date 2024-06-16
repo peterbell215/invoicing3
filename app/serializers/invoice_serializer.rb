@@ -4,7 +4,7 @@
 class InvoiceSerializer < Blueprinter::Base
   identifier :id
 
-  fields :date, :paid
+  fields :date, :status
 
   association :client, blueprint: ClientSerializer, view: :short_details
   association :client_sessions, blueprint: ClientSessionSerializer, view: :short_details

@@ -9,6 +9,8 @@ class Invoice < ApplicationRecord
 
   validates :date, presence: true
 
+  enum status: [:created, :sent, :paid]
+
   # Deals with changing changing client sessions in invoice.
   # @param [HashWithIndifferentAccess] attrs
   def self.create(attrs)

@@ -8,8 +8,9 @@ describe InvoiceSerializer do
   let(:client_as_json) { ClientSerializer.render_as_hash(invoice.client, view: :short_details) }
 
   context 'When it creates valid JSON' do
-    specify { expect(json[:invoice].keys.sort).to match [:id, :amount, :date, :client, :client_sessions, :paid].sort }
+    specify { expect(json[:invoice].keys.sort).to match [:id, :amount, :date, :client, :client_sessions, :status].sort }
     specify { expect(json[:invoice][:id]).to eq invoice.id }
+    specify { expect(json[:invoice][:status]).to match /created/ }
     specify { expect(json[:invoice][:client]).to match client_as_json }
 
     it 'includes the individual sessions' do
