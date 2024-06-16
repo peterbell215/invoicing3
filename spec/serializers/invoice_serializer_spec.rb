@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe InvoiceSerializer do
   subject(:json) { InvoiceSerializer.render_as_hash(invoice, root: :invoice) }
-  let(:invoice) { FactoryBot.create :invoice }
+  let(:invoice) { FactoryBot.create :invoice, :client_with_sessions }
   let(:client_as_json) { ClientSerializer.render_as_hash(invoice.client, view: :short_details) }
 
   context 'When it creates valid JSON' do
