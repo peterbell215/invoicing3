@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'webdrivers'
 require 'vite_rails'
 
 RSpec.describe 'Client Session Administration' do
