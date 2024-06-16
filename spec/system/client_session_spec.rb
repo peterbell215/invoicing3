@@ -7,13 +7,13 @@ RSpec.describe 'Client Session Administration' do
   let!(:admin_user) { create(:admin_user) }
   let!(:clients) { create_list(:client_with_random_name, 5, :with_client_sessions) }
 
-  scenario 'show the Client Sessions Index page with all sessions listed', :js do
-    puts Capybara.current_url
+  before do
     sign_in admin_user
     visit client_sessions_path
+  end
 
+  scenario 'show the Client Sessions Index page with all sessions listed', :js do
     expect(page.find('h1')).to have_content('Client Sessions List')
-
     expect(page).to have_css('tr', count: (5 * 4) + 1)
 
     clients.each do |client|
