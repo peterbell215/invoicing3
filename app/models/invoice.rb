@@ -9,7 +9,7 @@ class Invoice < ApplicationRecord
 
   validates :date, presence: true
 
-  enum status: [:created, :sent, :paid]
+  enum status: { created: 0, sent: 1, paid: 2 }
 
   # Deals with changing changing client sessions in invoice.
   # @param [HashWithIndifferentAccess] attrs
@@ -24,12 +24,12 @@ class Invoice < ApplicationRecord
       existing_client_session_ids = ClientSession.where(invoice_id: self.id).pick(:id)
       remove_from_invoice = existing_client_session_ids - client_session_ids
       add_to_invoice = client_session_ids - existing_client_session_ids
-      ClientSession.where(id: remove_from_invoice).update_all(invoice_id: nil)
+      ClientSession.where(id: remove_from_invoice).update(invoice_id: nil)
     else
       add_to_invoice = client_session_ids
     end
 
-    ClientSession.where(id: add_to_invoice).update_all(invoice_id: self.id) unless add_to_invoice.empty?
+    ClientSession.where(id: add_to_invoice).update(invoice_id: self.id) unless add_to_invoice.empty?
     self
   end
 end
